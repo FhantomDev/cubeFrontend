@@ -1,11 +1,13 @@
+// src/GridExample.jsx
 'use client';
 import React, { useState } from "react";
-import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
+import { AllEnterpriseModule } from "ag-grid-enterprise"; // requiere ag-grid-enterprise instalado
 import { AgGridReact } from "ag-grid-react";
-import { themeBalham } from "ag-grid-community";
+import { themeAlpine } from "ag-grid-community";
 
-// Registrar los módulos de AG Grid
-ModuleRegistry.registerModules([AllCommunityModule]);
+// registrar módulos (community + enterprise)
+ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
 const GridExample = () => {
   const [rowData] = useState([
@@ -18,21 +20,24 @@ const GridExample = () => {
   ]);
 
   const [colDefs] = useState([
-    { field: "make" },
-    { field: "model" },
-    { field: "price" },
-    { field: "electric" },
+    { field: "make", rowGroup: true, enableRowGroup: true, enablePivot: true },     // row group
+    { field: "model", enableRowGroup: true, enablePivot: true },                   // opcional
+    { field: "price", aggFunc: "sum", enableValue: true, enablePivot: true },
+    { field: "electric", pivot: true, enablePivot: true, enablePivot: true },
   ]);
 
-  const defaultColDef = { flex: 1, sortable: true, filter: true };
+  const defaultColDef = { flex: 1, sortable: true, filter: true, resizable: true };
 
   return (
-    <div style={{ width: "100%", height: "400px" }}>
+    <div className="ag-theme-alpine" style={{ width: "100%", height: "500px" }}>
       <AgGridReact
-        theme={themeBalham}
+        theme={themeAlpine}
         rowData={rowData}
         columnDefs={colDefs}
         defaultColDef={defaultColDef}
+        sideBar={true}        // panel lateral para arrastrar columnas
+        pivotMode={true}      // activa pivot
+        pivotPanelShow={'always'} // opcional: mostrar panel pivot siempre
       />
     </div>
   );
