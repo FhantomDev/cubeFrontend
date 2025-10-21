@@ -39,7 +39,7 @@ const GetDatos = () => {
       .then((resultSet) => {
         const data = resultSet.tablePivot();
 
-        // 🔧 Reemplazar puntos en las claves por guiones bajos
+        // Reemplazar puntos en las claves por guiones bajos
         const cleanedData = data.map((row) => {
           const newRow = {};
           Object.keys(row).forEach((key) => {
@@ -48,12 +48,12 @@ const GetDatos = () => {
           return newRow;
         });
 
-        console.log("✅ Datos normalizados:", cleanedData);
+        console.log("Datos normalizados:", cleanedData);
         setRowData(cleanedData);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("❌ Error al cargar datos desde Cube.js:", error);
+        console.error("Error al cargar datos desde Cube.js:", error);
         setLoading(false);
       });
   }, []);
@@ -80,14 +80,9 @@ const GetDatos = () => {
     []
   );
 
-  const containerStyle = useMemo(
-    () => ({ width: "100%", height: "100vh" }),
-    []
-  );
-
   return (
-    <div style={containerStyle}>
-      <div style={{ height: "100%", width: "100%" }} className="ag-theme-alpine">
+    <div style={{ width: "100%", height: "100vh" }}>
+      <div style={{ height: "100%", width: "100%" }}>
         <AgGridReact
           theme={themeAlpine}
           rowData={rowData}
