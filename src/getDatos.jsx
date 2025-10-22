@@ -44,6 +44,7 @@ const GetDatos = () => {
       .then((resultSet) => {
         const data = resultSet.tablePivot();
         console.log("Datos de Cube.js:", data);
+        console.log("Row Data completo:", data);
         setRowData(data);
         setLoading(false);
       })
@@ -55,16 +56,16 @@ const GetDatos = () => {
 
 
   const [columnDefs] = useState([
-    { headerName: "Fecha de Creación", valueGetter: (p) => p.data["main.created_at"], enableValue: false },
-    { headerName: "Categoría de Producto", valueGetter: (p) => p.data["main.product_categories_name"] },
-    { headerName: "Nombre de Producto", valueGetter: (p) => p.data["main.products_name"] },
-    { headerName: "Estado", valueGetter: (p) => p.data["main.status"] },
-    { headerName: "Ciudad de Usuario", valueGetter: (p) => p.data["main.users_city"] },
-    { headerName: "Compañía de Usuario", valueGetter: (p) => p.data["main.users_company"] },
-    { headerName: "Género de Usuario", valueGetter: (p) => p.data["main.users_gender"] },
-    { headerName: "Estado de Usuario", valueGetter: (p) => p.data["main.users_state"] },
-    { headerName: "Precio Total", valueGetter: (p) => Number(p.data["main.line_items_sum_price"]), },
-    { headerName: "Cantidad Total", valueGetter: (p) => Number(p.data["main.line_items_sum_quantity"]), },
+    { headerName: "Fecha de Creación", valueGetter: (p) => p.data ? p.data["main.created_at"] : null, enableValue: false, },
+    { headerName: "Categoría de Producto", valueGetter: (p) => p.data ? p.data["main.product_categories_name"] : null, enableValue: false, enableRowGroup: true },
+    { headerName: "Nombre de Producto",       valueGetter: (p) => p.data ? p.data["main.products_name"] : null, enableValue: false, enableRowGroup: true },
+    { headerName: "Estado", valueGetter: (p) => p.data ? p.data["main.status"] : null, enableValue: false },
+    { headerName: "Ciudad de Usuario", valueGetter: (p) => p.data ? p.data["main.users_city"] : null, enableValue: false },
+    { headerName: "Compañía de Usuario", valueGetter: (p) => p.data ? p.data["main.users_company"] : null, enableValue: false },
+    { headerName: "Género de Usuario", valueGetter: (p) => p.data ? p.data["main.users_gender"] : null, enableValue: false },
+    { headerName: "Estado de Usuario", valueGetter: (p) => p.data ? p.data["main.users_state"] : null, enableValue: false },
+    { headerName: "Precio Total", valueGetter: (p) => p.data ? Number(p.data["main.line_items_sum_price"]) : null, enableValue: true, aggFunc: 'sum' },
+    { headerName: "Cantidad Total", valueGetter: (p) => p.data ? Number(p.data["main.line_items_sum_quantity"]) : null, enableValue: true, aggFunc: 'sum' },
   ]);
 
   const defaultColDef = useMemo(
@@ -74,10 +75,6 @@ const GetDatos = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enablePivot: true,
-      enableValue: true,
-      enableRowGroup: true,
-      filter: "agSelectableColumnFilter",
     }),
     []
   );
@@ -93,7 +90,7 @@ const GetDatos = () => {
           defaultColDef={defaultColDef}
           pivotMode={false}
           pivotPanelShow="always"
-          sideBar={["columns", "filters-new"]}
+          sideBar={["columns", "filters"]}
           enableFilterHandlers={true}
         />
       </div>
