@@ -38,18 +38,8 @@ const GetDatos = () => {
       .load(query)
       .then((resultSet) => {
         const data = resultSet.tablePivot();
-
-        // Reemplazar puntos en las claves por guiones bajos
-        const cleanedData = data.map((row) => {
-          const newRow = {};
-          Object.keys(row).forEach((key) => {
-            newRow[key.replace(/\./g, "_")] = row[key];
-          });
-          return newRow;
-        });
-
-        console.log("Datos normalizados:", cleanedData);
-        setRowData(cleanedData);
+        console.log("Datos de Cube.js:", data);
+        setRowData(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -59,11 +49,13 @@ const GetDatos = () => {
   }, []);
 
 
-  // Columnas (usando nombres reales de las claves)
   const [columnDefs] = useState([
-    { field: "orders_created_at" },
-    { field: "orders_id" },
-    { field: "orders_count" },
+    {
+      headerName: "Fecha de Creación",
+      valueGetter: (p) => p.data["orders.created_at"],
+    },
+    { headerName: "ID de Orden", valueGetter: (p) => p.data["orders.id"] },
+    { headerName: "Conteo", valueGetter: (p) => p.data["orders.count"] },
   ]);
 
   const defaultColDef = useMemo(
