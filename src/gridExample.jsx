@@ -21,7 +21,7 @@ const GridExample = () => {
 
   const [colDefs] = useState([
     { field: "make", rowGroup: true, enableRowGroup: true, enablePivot: true },     // row group
-    { field: "model", enableRowGroup: true, enablePivot: true },                   // opcional
+    { field: "model", enableRowGroup: true, enablePivot: true, },                   // opcional
     { field: "price", aggFunc: "sum", enableValue: true, enablePivot: true },
     { field: "electric", pivot: true, enablePivot: true, enablePivot: true },
   ]);

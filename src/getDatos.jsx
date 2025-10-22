@@ -5,6 +5,7 @@ import { AllEnterpriseModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { themeAlpine } from "ag-grid-community";
 import cube from "@cubejs-client/core";
+import { themeCostum } from "./colorCustom";
 
 // Registrar módulos (Community + Enterprise)
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
@@ -24,14 +25,18 @@ const GetDatos = () => {
   useEffect(() => {
     const query = {
       limit: 100,
-      dimensions: ["orders.created_at", "orders.id"],
-      measures: ["orders.count"],
-      timeDimensions: [
-        {
-          dimension: "orders.created_at",
-          granularity: "month",
-        },
+      dimensions: [
+        "main.created_at",
+        "main.product_categories_name",
+        "main.products_name",
+        "main.status",
+        "main.users_city",
+        "main.users_company",
+        "main.users_gender",
+        "main.users_state",
       ],
+      measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
+      filters: [],
     };
 
     cubeApi
@@ -50,12 +55,16 @@ const GetDatos = () => {
 
 
   const [columnDefs] = useState([
-    {
-      headerName: "Fecha de Creación",
-      valueGetter: (p) => p.data["orders.created_at"],
-    },
-    { headerName: "ID de Orden", valueGetter: (p) => p.data["orders.id"] },
-    { headerName: "Conteo", valueGetter: (p) => p.data["orders.count"] },
+    { headerName: "Fecha de Creación", valueGetter: (p) => p.data["main.created_at"], enableValue: false },
+    { headerName: "Categoría de Producto", valueGetter: (p) => p.data["main.product_categories_name"] },
+    { headerName: "Nombre de Producto", valueGetter: (p) => p.data["main.products_name"] },
+    { headerName: "Estado", valueGetter: (p) => p.data["main.status"] },
+    { headerName: "Ciudad de Usuario", valueGetter: (p) => p.data["main.users_city"] },
+    { headerName: "Compañía de Usuario", valueGetter: (p) => p.data["main.users_company"] },
+    { headerName: "Género de Usuario", valueGetter: (p) => p.data["main.users_gender"] },
+    { headerName: "Estado de Usuario", valueGetter: (p) => p.data["main.users_state"] },
+    { headerName: "Precio Total", valueGetter: (p) => Number(p.data["main.line_items_sum_price"]), },
+    { headerName: "Cantidad Total", valueGetter: (p) => Number(p.data["main.line_items_sum_quantity"]), },
   ]);
 
   const defaultColDef = useMemo(
@@ -68,6 +77,7 @@ const GetDatos = () => {
       enablePivot: true,
       enableValue: true,
       enableRowGroup: true,
+      filter: "agSelectableColumnFilter",
     }),
     []
   );
@@ -76,14 +86,15 @@ const GetDatos = () => {
     <div style={{ width: "100%", height: "100vh" }}>
       <div style={{ height: "100%", width: "100%" }}>
         <AgGridReact
-          theme={themeAlpine}
+          theme={themeCostum}
           rowData={rowData}
           loading={loading}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          pivotMode={true}
-          sideBar="columns"
+          pivotMode={false}
           pivotPanelShow="always"
+          sideBar={["columns", "filters-new"]}
+          enableFilterHandlers={true}
         />
       </div>
     </div>
