@@ -1,11 +1,13 @@
 'use client';
 import React, { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { AllEnterpriseModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { themeAlpine } from "ag-grid-community";
 import cube from "@cubejs-client/core";
 import { themeCostum } from "./colorCustom";
+import Breadcrumb from "./components/Breadcrumb"; // Importar Breadcrumb
 
 // Registrar módulos (Community + Enterprise)
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
@@ -17,9 +19,32 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Inicializar Cube.js
 const cubeApi = cube(API_KEY, { apiUrl: API_URL });
 
+// Mapeo de rutas a nombres legibles
+const breadcrumbNameMap = {
+  '/get-datos': 'Datos de Cube.js',
+  '/grid-example': 'Grid de Ejemplo',
+};
+
 const GetDatos = () => {
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+
+  // Generar crumbs dinámicamente
+  const crumbs = useMemo(() => {
+    const pathnames = location.pathname.split('/').filter((x) => x);
+    const breadcrumbs = [{ label: 'Inicio', path: '/' }];
+
+    let currentPath = '';
+    pathnames.forEach(name => {
+      currentPath += `/${name}`;
+      if (breadcrumbNameMap[currentPath]) {
+        breadcrumbs.push({ label: breadcrumbNameMap[currentPath], path: currentPath });
+      }
+    });
+
+    return breadcrumbs;
+  }, [location.pathname]);
 
   // Llamada a la API de Cube.js
   useEffect(() => {
@@ -43,8 +68,6 @@ const GetDatos = () => {
       .load(query)
       .then((resultSet) => {
         const data = resultSet.tablePivot();
-        console.log("Datos de Cube.js:", data);
-        console.log("Row Data completo:", data);
         setRowData(data);
         setLoading(false);
       })
@@ -56,9 +79,9 @@ const GetDatos = () => {
 
 
   const [columnDefs] = useState([
-    { headerName: "Fecha de Creación", valueGetter: (p) => p.data ? p.data["main.created_at"] : null, enableValue: false, },
     { headerName: "Categoría de Producto", valueGetter: (p) => p.data ? p.data["main.product_categories_name"] : null, enableValue: false, enableRowGroup: true },
-    { headerName: "Nombre de Producto",       valueGetter: (p) => p.data ? p.data["main.products_name"] : null, enableValue: false, enableRowGroup: true },
+    { headerName: "Fecha de Creación", valueGetter: (p) => p.data ? p.data["main.created_at"] : null, enableValue: false, },
+    { headerName: "Nombre de Producto", valueGetter: (p) => p.data ? p.data["main.products_name"] : null, enableValue: false, enableRowGroup: true },
     { headerName: "Estado", valueGetter: (p) => p.data ? p.data["main.status"] : null, enableValue: false },
     { headerName: "Ciudad de Usuario", valueGetter: (p) => p.data ? p.data["main.users_city"] : null, enableValue: false },
     { headerName: "Compañía de Usuario", valueGetter: (p) => p.data ? p.data["main.users_company"] : null, enableValue: false },
@@ -75,24 +98,39 @@ const GetDatos = () => {
       sortable: true,
       filter: true,
       resizable: true,
+      enablePivot: true,
     }),
     []
   );
 
+
+  const statusBar = useMemo(() => {
+    return {
+      statusPanels: [
+        { statusPanel: 'agTotalAndFilteredRowCountComponent' },
+        { statusPanel: 'agTotalRowCountComponent' },
+      ]
+    };
+  }, []);
+
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <div style={{ height: "100%", width: "100%" }}>
-        <AgGridReact
-          theme={themeCostum}
-          rowData={rowData}
-          loading={loading}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          pivotMode={false}
-          pivotPanelShow="always"
-          sideBar={["columns", "filters"]}
-          enableFilterHandlers={true}
-        />
+    <div>
+      <Breadcrumb crumbs={crumbs} />
+      <div style={{ width: "100%", height: "calc(100vh - 120px)" }}> {/* Ajuste de altura */}
+        <div style={{ height: "100%", width: "100%" }}>
+          <AgGridReact
+            theme={themeCostum}
+            rowData={rowData}
+            loading={loading}
+            columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+            pivotMode={false}
+            pivotPanelShow="always"
+            sideBar={["columns", "filters"]}
+            enableFilterHandlers={true}
+            statusBar={statusBar}
+          />
+        </div>
       </div>
     </div>
   );
