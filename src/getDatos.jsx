@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { AllEnterpriseModule } from "ag-grid-enterprise";
@@ -28,9 +28,9 @@ const levelDefs = {
     ],
     measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
     columnDefs: [
-      { headerName: "Categoría de Producto", valueGetter: p => p.data["main.product_categories_name"], enableRowGroup: true },
-      { headerName: "Precio Total", valueGetter: p => p.data["main.line_items_sum_price"], aggFunc: 'sum' },
-      { headerName: "Cantidad Total", valueGetter: p => p.data["main.line_items_sum_quantity"], aggFunc: 'sum' },
+      { headerName: "Categoría de Producto", valueGetter: p => p.data ? p.data["main.product_categories_name"] : '', enableRowGroup: true },
+      { headerName: "Precio Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_price"]) : 0, aggFunc: 'sum', enableValue: true },
+      { headerName: "Cantidad Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_quantity"]) : 0, aggFunc: 'sum', enableValue: true },
     ],
     drillDownField: "main.product_categories_name",
   },
@@ -38,16 +38,18 @@ const levelDefs = {
     dimensions: ["main.products_name"],
     measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
     columnDefs: [
-      { headerName: "Nombre de Producto", valueGetter: p => p.data["main.products_name"] },
-      { headerName: "Precio Total", valueGetter: p => p.data["main.line_items_sum_price"], aggFunc: 'sum' },
-      { headerName: "Cantidad Total", valueGetter: p => p.data["main.line_items_sum_quantity"], aggFunc: 'sum' },
+      { headerName: "Nombre de Producto", valueGetter: p => p.data ? p.data["main.products_name"] : '', enableRowGroup: true },
+      { headerName: "Precio Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_price"]) : 0, aggFunc: 'sum', enableValue: true },
+      { headerName: "Cantidad Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_quantity"]) : 0, aggFunc: 'sum', enableValue: true },
     ],
     // No hay más drilldown desde este nivel en este ejemplo
   },
 };
 
 const GetDatos = () => {
+  const gridRef = useRef();
   const [rowData, setRowData] = useState([]);
+  const [rawRowData, setRawRowData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [filters, setFilters] = useState([]);
@@ -68,14 +70,14 @@ const GetDatos = () => {
       }
     });
     // Añadir breadcrumbs para el drilldown
-        filters.forEach((filter, index) => {
-            breadcrumbs.push({ 
-                label: filter.values[0],
-                path: `#`, 
-                isDrilldown: true, 
-                drilldownLevel: index + 1 
-            });
-        });
+    filters.forEach((filter, index) => {
+      breadcrumbs.push({
+        label: filter.values[0],
+        path: `#`,
+        isDrilldown: true,
+        drilldownLevel: index + 1
+      });
+    });
     return breadcrumbs;
   }, [location.pathname, filters]);
 
@@ -96,7 +98,9 @@ const GetDatos = () => {
     cubeApi
       .load(query)
       .then((resultSet) => {
-        setRowData(resultSet.tablePivot());
+        const rawData = resultSet.tablePivot(); // o resultSet.rawData() dependiendo de lo que devuelva la API
+        setRawRowData(rawData);
+        setRowData(rawData);
         setLoading(false);
       })
       .catch((error) => {
@@ -119,6 +123,16 @@ const GetDatos = () => {
     }
   }, [currentLevelDef, drilldownLevel, filters]);
 
+  const onPivotModeChanged = useCallback(() => {
+    if (gridRef.current && gridRef.current.api) {
+      const isPivotMode = gridRef.current.api.isPivotMode();
+      if (!isPivotMode) {
+        gridRef.current.api.setRowData(rawRowData);
+        gridRef.current.api.setColumnDefs(currentLevelDef.columnDefs);
+      }
+    }
+  }, [rawRowData, currentLevelDef.columnDefs]);
+
   const defaultColDef = useMemo(
     () => ({
       flex: 1,
@@ -126,6 +140,7 @@ const GetDatos = () => {
       sortable: true,
       filter: true,
       resizable: true,
+      enablePivot: true,
     }),
     []
   );
@@ -136,17 +151,20 @@ const GetDatos = () => {
       <div style={{ width: "100%", height: "calc(100vh - 120px)" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
+            ref={gridRef}
             theme={themeCostum}
             rowData={rowData}
             loading={loading}
             columnDefs={currentLevelDef.columnDefs}
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClicked}
+            pivotPanelShow="always"
+            sideBar={["columns", "filters"]}
+            onPivotModeChanged={onPivotModeChanged}
           />
         </div>
       </div>
     </div>
   );
 };
-
 export default GetDatos;
