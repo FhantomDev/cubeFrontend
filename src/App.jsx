@@ -1,9 +1,8 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import GridExample from "./gridExample.jsx";
-import GetDatos from "./getDatos.jsx";
-import Home from "./Home.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Categoria from "./pages/categoria/Categoria";
+import Home from "./pages/home/Home";
 
 function App() {
   return (
@@ -11,8 +10,7 @@ function App() {
       <main style={{ padding: '20px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/get-datos" element={<GetDatos />} />
-          <Route path="/grid-example" element={<GridExample />} />
+          <Route path="/categoria" element={<Categoria />} />
         </Routes>
       </main>
     </BrowserRouter>

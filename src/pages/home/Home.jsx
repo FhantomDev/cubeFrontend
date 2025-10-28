@@ -26,8 +26,7 @@ const Home = () => {
       <h1>Página de Inicio</h1>
       <p>Bienvenido al proyecto de prueba.</p>
       <nav style={navStyles}>
-        <Link to="/get-datos" style={linkStyles}>Ver Datos de Cube.js</Link>
-        <Link to="/grid-example" style={linkStyles}>Ver Grid de Ejemplo</Link>
+        <Link to="/categoria" style={linkStyles}>Ver Datos de Cube.js</Link>
       </nav>
     </div>
   );
