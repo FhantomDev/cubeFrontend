@@ -1,95 +1,123 @@
 'use client';
-import React, { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { AllEnterpriseModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
 import { themeAlpine } from "ag-grid-community";
 import cube from "@cubejs-client/core";
 import { themeCostum } from "./colorCustom";
-import Breadcrumb from "./components/Breadcrumb"; // Importar Breadcrumb
+import Breadcrumb from "./components/Breadcrumb";
 
-// Registrar módulos (Community + Enterprise)
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
-// Variables de entorno (Vite)
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
-
-// Inicializar Cube.js
 const cubeApi = cube(API_KEY, { apiUrl: API_URL });
 
-// Mapeo de rutas a nombres legibles
 const breadcrumbNameMap = {
-  '/get-datos': 'Datos de Cube.js',
+  '/get-datos': 'Categoria de producto',
   '/grid-example': 'Grid de Ejemplo',
+};
+
+// --- Definiciones de Niveles de Drilldown ---
+const levelDefs = {
+  0: {
+    dimensions: [
+      "main.product_categories_name",
+    ],
+    measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
+    columnDefs: [
+      { headerName: "Categoría de Producto", valueGetter: p => p.data["main.product_categories_name"], enableRowGroup: true },
+      { headerName: "Precio Total", valueGetter: p => p.data["main.line_items_sum_price"], aggFunc: 'sum' },
+      { headerName: "Cantidad Total", valueGetter: p => p.data["main.line_items_sum_quantity"], aggFunc: 'sum' },
+    ],
+    drillDownField: "main.product_categories_name",
+  },
+  1: {
+    dimensions: ["main.products_name"],
+    measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
+    columnDefs: [
+      { headerName: "Nombre de Producto", valueGetter: p => p.data["main.products_name"] },
+      { headerName: "Precio Total", valueGetter: p => p.data["main.line_items_sum_price"], aggFunc: 'sum' },
+      { headerName: "Cantidad Total", valueGetter: p => p.data["main.line_items_sum_quantity"], aggFunc: 'sum' },
+    ],
+    // No hay más drilldown desde este nivel en este ejemplo
+  },
 };
 
 const GetDatos = () => {
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
+  const [drilldownLevel, setDrilldownLevel] = useState(0);
+  const [filters, setFilters] = useState([]);
 
-  // Generar crumbs dinámicamente
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentLevelDef = levelDefs[drilldownLevel];
+
   const crumbs = useMemo(() => {
     const pathnames = location.pathname.split('/').filter((x) => x);
-    const breadcrumbs = [{ label: 'Inicio', path: '/' }];
-
+    const breadcrumbs = [{ label: 'Inicio', path: '/' }]; // Corregido: Sin drilldownLevel para que navegue
     let currentPath = '';
     pathnames.forEach(name => {
       currentPath += `/${name}`;
       if (breadcrumbNameMap[currentPath]) {
-        breadcrumbs.push({ label: breadcrumbNameMap[currentPath], path: currentPath });
+        breadcrumbs.push({ label: breadcrumbNameMap[currentPath], path: currentPath, drilldownLevel: 0 });
       }
     });
-
+    // Añadir breadcrumbs para el drilldown
+        filters.forEach((filter, index) => {
+            breadcrumbs.push({ 
+                label: filter.values[0],
+                path: `#`, 
+                isDrilldown: true, 
+                drilldownLevel: index + 1 
+            });
+        });
     return breadcrumbs;
-  }, [location.pathname]);
+  }, [location.pathname, filters]);
 
-  // Llamada a la API de Cube.js
+  const handleBreadcrumbClick = (level) => {
+    setDrilldownLevel(level);
+    setFilters(filters.slice(0, level));
+  };
+
   useEffect(() => {
+    setLoading(true);
     const query = {
       limit: 100,
-      dimensions: [
-        "main.created_at",
-        "main.product_categories_name",
-        "main.products_name",
-        "main.status",
-        "main.users_city",
-        "main.users_company",
-        "main.users_gender",
-        "main.users_state",
-      ],
-      measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
-      filters: [],
+      dimensions: currentLevelDef.dimensions,
+      measures: currentLevelDef.measures,
+      filters: filters,
     };
 
     cubeApi
       .load(query)
       .then((resultSet) => {
-        const data = resultSet.tablePivot();
-        setRowData(data);
+        setRowData(resultSet.tablePivot());
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error al cargar datos desde Cube.js:", error);
         setLoading(false);
       });
-  }, []);
+  }, [drilldownLevel, filters, currentLevelDef]);
 
-
-  const [columnDefs] = useState([
-    { headerName: "Categoría de Producto", valueGetter: (p) => p.data ? p.data["main.product_categories_name"] : null, enableValue: false, enableRowGroup: true },
-    { headerName: "Fecha de Creación", valueGetter: (p) => p.data ? p.data["main.created_at"] : null, enableValue: false, },
-    { headerName: "Nombre de Producto", valueGetter: (p) => p.data ? p.data["main.products_name"] : null, enableValue: false, enableRowGroup: true },
-    { headerName: "Estado", valueGetter: (p) => p.data ? p.data["main.status"] : null, enableValue: false },
-    { headerName: "Ciudad de Usuario", valueGetter: (p) => p.data ? p.data["main.users_city"] : null, enableValue: false },
-    { headerName: "Compañía de Usuario", valueGetter: (p) => p.data ? p.data["main.users_company"] : null, enableValue: false },
-    { headerName: "Género de Usuario", valueGetter: (p) => p.data ? p.data["main.users_gender"] : null, enableValue: false },
-    { headerName: "Estado de Usuario", valueGetter: (p) => p.data ? p.data["main.users_state"] : null, enableValue: false },
-    { headerName: "Precio Total", valueGetter: (p) => p.data ? Number(p.data["main.line_items_sum_price"]) : null, enableValue: true, aggFunc: 'sum' },
-    { headerName: "Cantidad Total", valueGetter: (p) => p.data ? Number(p.data["main.line_items_sum_quantity"]) : null, enableValue: true, aggFunc: 'sum' },
-  ]);
+  const handleRowClicked = useCallback((event) => {
+    const { drillDownField } = currentLevelDef;
+    if (drillDownField && levelDefs[drilldownLevel + 1]) {
+      const clickedValue = event.data[drillDownField];
+      const newFilter = {
+        member: drillDownField,
+        operator: 'equals',
+        values: [clickedValue],
+      };
+      setFilters([...filters, newFilter]);
+      setDrilldownLevel(drilldownLevel + 1);
+    }
+  }, [currentLevelDef, drilldownLevel, filters]);
 
   const defaultColDef = useMemo(
     () => ({
@@ -98,37 +126,22 @@ const GetDatos = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enablePivot: true,
     }),
     []
   );
 
-
-  const statusBar = useMemo(() => {
-    return {
-      statusPanels: [
-        { statusPanel: 'agTotalAndFilteredRowCountComponent' },
-        { statusPanel: 'agTotalRowCountComponent' },
-      ]
-    };
-  }, []);
-
   return (
     <div>
-      <Breadcrumb crumbs={crumbs} />
-      <div style={{ width: "100%", height: "calc(100vh - 120px)" }}> {/* Ajuste de altura */}
+      <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
+      <div style={{ width: "100%", height: "calc(100vh - 120px)" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
             theme={themeCostum}
             rowData={rowData}
             loading={loading}
-            columnDefs={columnDefs}
+            columnDefs={currentLevelDef.columnDefs}
             defaultColDef={defaultColDef}
-            pivotMode={false}
-            pivotPanelShow="always"
-            sideBar={["columns", "filters"]}
-            enableFilterHandlers={true}
-            statusBar={statusBar}
+            onRowClicked={handleRowClicked}
           />
         </div>
       </div>

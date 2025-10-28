@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const breadcrumbStyles = {
@@ -19,6 +19,7 @@ const breadcrumbItemStyles = {
 const breadcrumbLinkStyles = {
   color: '#0275d8',
   textDecoration: 'none',
+  cursor: 'pointer',
 };
 
 const breadcrumbSeparatorStyles = {
@@ -30,11 +31,17 @@ const activeBreadcrumbItemStyles = {
   color: '#6c757d',
 };
 
-/**
- * Componente Breadcrumb integrado con react-router-dom
- * @param {{ crumbs: Array<{label: string, path: string}> }} props
- */
-const Breadcrumb = ({ crumbs }) => {
+const Breadcrumb = ({ crumbs, onDrilldownClick }) => {
+  const navigate = useNavigate();
+
+  const handleClick = (crumb) => {
+    if (onDrilldownClick && crumb.drilldownLevel !== undefined) {
+      onDrilldownClick(crumb.drilldownLevel);
+    } else if (crumb.path !== '#') {
+      navigate(crumb.path);
+    }
+  };
+
   return (
     <nav aria-label="breadcrumb">
       <ol style={breadcrumbStyles}>
@@ -42,9 +49,9 @@ const Breadcrumb = ({ crumbs }) => {
           <li key={index} style={breadcrumbItemStyles}>
             {index < crumbs.length - 1 ? (
               <>
-                <Link to={crumb.path} style={breadcrumbLinkStyles}>
+                <a onClick={() => handleClick(crumb)} style={breadcrumbLinkStyles}>
                   {crumb.label}
-                </Link>
+                </a>
                 <span style={breadcrumbSeparatorStyles}>/</span>
               </>
             ) : (
@@ -62,8 +69,10 @@ Breadcrumb.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       path: PropTypes.string.isRequired,
+      drilldownLevel: PropTypes.number, // Opcional
     })
   ).isRequired,
+  onDrilldownClick: PropTypes.func,
 };
 
 export default Breadcrumb;
