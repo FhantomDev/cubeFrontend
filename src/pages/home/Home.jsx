@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <div style={homeStyles}>
       <h1>Página de Inicio</h1>
-      <p>Bienvenido al proyecto de prueba.</p>
+      <p>Prueba de concepto de cube.js.</p>
       <nav style={navStyles}>
         <Link to="/categoria" style={linkStyles}>Ver Datos de Cube.js</Link>
       </nav>
