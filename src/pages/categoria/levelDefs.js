@@ -19,6 +19,15 @@ export const levelDefs = {
       { headerName: "Precio Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_price"]) : 0, aggFunc: 'sum', enableValue: true },
       { headerName: "Cantidad Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_quantity"]) : 0, aggFunc: 'sum', enableValue: true },
     ],
-    // No hay más drilldown desde este nivel en este ejemplo
+    drillDownField: "main.products_name",
+  },
+  2: {
+    dimensions: ["main.users_state"],
+    measures: ["main.line_items_sum_price", "main.line_items_sum_quantity"],
+    columnDefs: [
+      { headerName: "Estados", valueGetter: p => p.data ? p.data["main.users_state"] : '', enableRowGroup: true },
+      { headerName: "Precio Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_price"]) : 0, aggFunc: 'sum', enableValue: true },
+      { headerName: "Cantidad Total", valueGetter: p => p.data ? Number(p.data["main.line_items_sum_quantity"]) : 0, aggFunc: 'sum', enableValue: true },
+    ],
   },
 };

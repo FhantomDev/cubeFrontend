@@ -8,6 +8,7 @@ import { themeCostum } from "../../styles/theme";
 import Breadcrumb from "../../components/common/Breadcrumb";
 import { levelDefs } from "./levelDefs";
 import useCubeData from "../../hooks/useCubeData";
+import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
@@ -70,10 +71,12 @@ const GetDatos = () => {
       };
       setFilters([...filters, newFilter]);
       setDrilldownLevel(drilldownLevel + 1);
+    } else {
+      alert("No hay mas niveles");
     }
   }, [currentLevelDef, drilldownLevel, filters]);
 
-  const onPivotModeChanged = useCallback(() => {
+  const onColumnPivotModeChanged = useCallback(() => {
     if (gridRef.current && gridRef.current.api) {
       const isPivotMode = gridRef.current.api.isPivotMode();
       if (!isPivotMode) {
@@ -95,6 +98,10 @@ const GetDatos = () => {
     []
   );
 
+  const loadingOverlayComponentParams = useMemo(() => {
+    return { loadingMessage: "Un momento por favor..." };
+  }, []);
+
   return (
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
@@ -109,8 +116,10 @@ const GetDatos = () => {
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClicked}
             pivotPanelShow="always"
-            sideBar={["columns", "filters"]}
-            onPivotModeChanged={onPivotModeChanged}
+            sideBar={["columns", "filters"]} true
+            onColumnPivotModeChanged={onColumnPivotModeChanged}
+            loadingOverlayComponent={customLoadingOverlay}
+            loadingOverlayComponentParams={loadingOverlayComponentParams}
           />
         </div>
       </div>
