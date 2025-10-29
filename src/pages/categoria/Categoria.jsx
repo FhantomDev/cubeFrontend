@@ -120,6 +120,8 @@ const GetDatos = () => {
               toolPanels: ["columns", "filters"],
               closeToolPanel: false,
             }}
+            loadingOverlayComponent={customLoadingOverlay}
+            loadingOverlayComponentParams={loadingOverlayComponentParams}
             onColumnPivotModeChanged={onColumnPivotModeChanged}
           />
         </div>
