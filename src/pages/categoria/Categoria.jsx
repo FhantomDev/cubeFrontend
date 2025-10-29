@@ -116,7 +116,7 @@ const GetDatos = () => {
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClicked}
             pivotPanelShow="always"
-            sideBar={["columns", "filters"]} true
+            sideBar={["columns", "filters"]}
             onColumnPivotModeChanged={onColumnPivotModeChanged}
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
