@@ -26,7 +26,6 @@ const GetDatos = () => {
   const currentLevelDef = levelDefs[drilldownLevel];
 
   const query = useMemo(() => ({
-    limit: 100,
     dimensions: currentLevelDef.dimensions,
     measures: currentLevelDef.measures,
     filters: filters,
