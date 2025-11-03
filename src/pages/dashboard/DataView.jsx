@@ -9,21 +9,34 @@ import Breadcrumb from "../../components/common/Breadcrumb";
 import { levelDefs } from "./levelDefs";
 import useCubeData from "../../hooks/useCubeData";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
+import ViewSelector from "../../components/ui/ViewSelector";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
 const breadcrumbNameMap = {
-  '/categoria': 'Categoria de producto',
+  '/dashboard': 'Dashboard',
 };
 
-const GetDatos = () => {
+const views = [
+  { id: 'categoria', name: 'Categoría' },
+  { id: 'cliente', name: 'Cliente' },
+];
+
+const DataView = () => {
   const gridRef = useRef();
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [filters, setFilters] = useState([]);
+  const [selectedView, setSelectedView] = useState('categoria');
 
   const location = useLocation();
 
-  const currentLevelDef = levelDefs[drilldownLevel];
+  const currentLevelDef = levelDefs[selectedView][drilldownLevel];
+
+  const handleViewChange = (viewId) => {
+    setSelectedView(viewId);
+    setDrilldownLevel(0);
+    setFilters([]);
+  };
 
   const query = useMemo(() => ({
     dimensions: currentLevelDef.dimensions,
@@ -61,7 +74,7 @@ const GetDatos = () => {
 
   const handleRowClicked = useCallback((event) => {
     const { drillDownField } = currentLevelDef;
-    if (drillDownField && levelDefs[drilldownLevel + 1]) {
+    if (drillDownField && levelDefs[selectedView][drilldownLevel + 1]) {
       const clickedValue = event.data[drillDownField];
       const newFilter = {
         member: drillDownField,
@@ -73,7 +86,7 @@ const GetDatos = () => {
     } else {
       alert("No hay mas niveles");
     }
-  }, [currentLevelDef, drilldownLevel, filters]);
+  }, [currentLevelDef, drilldownLevel, filters, selectedView]);
 
   const onColumnPivotModeChanged = useCallback(() => {
     if (gridRef.current && gridRef.current.api) {
@@ -104,7 +117,8 @@ const GetDatos = () => {
   return (
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
-      <div style={{ width: "100%", height: "calc(100vh - 120px)" }}>
+      <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+      <div style={{ width: "100%", height: "calc(100vh - 160px)" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
             ref={gridRef}
@@ -128,4 +142,4 @@ const GetDatos = () => {
     </div>
   );
 };
-export default GetDatos;
+export default DataView;
