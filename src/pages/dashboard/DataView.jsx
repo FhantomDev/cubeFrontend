@@ -135,6 +135,20 @@ const DataView = () => {
     return { loadingMessage: "Un momento por favor..." };
   }, []);
 
+
+  const statusBar = useMemo(() => {
+    return {
+      statusPanels: [
+        { statusPanel: 'agTotalAndFilteredRowCountComponent' },
+        { statusPanel: 'agTotalRowCountComponent' },
+        { statusPanel: 'agFilteredRowCountComponent' },
+        { statusPanel: 'agSelectedRowCountComponent' },
+        { statusPanel: 'agAggregationComponent' }
+      ]
+    };
+  }, []);
+
+
   return (
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
@@ -158,6 +172,7 @@ const DataView = () => {
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             onColumnPivotModeChanged={onColumnPivotModeChanged}
             onColumnVisible={handleColumnVisible}
+            statusBar={statusBar}
           />
         </div>
       </div>
