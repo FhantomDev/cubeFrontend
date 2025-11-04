@@ -5,6 +5,7 @@ import DataView from "./pages/dashboard/DataView";
 import Home from "./pages/home/Home";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DataView />} />
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </main>
   );
