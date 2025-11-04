@@ -27,6 +27,7 @@ const DataView = () => {
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [filters, setFilters] = useState([]);
   const [selectedView, setSelectedView] = useState('categoria');
+  const [dynamicDimensions, setDynamicDimensions] = useState([]);
 
   const location = useLocation();
 
@@ -36,13 +37,14 @@ const DataView = () => {
     setSelectedView(viewId);
     setDrilldownLevel(0);
     setFilters([]);
+    setDynamicDimensions([]);
   };
 
   const query = useMemo(() => ({
-    dimensions: currentLevelDef.dimensions,
+    dimensions: [...currentLevelDef.dimensions, ...dynamicDimensions],
     measures: currentLevelDef.measures,
     filters: filters,
-  }), [currentLevelDef, filters]);
+  }), [currentLevelDef, filters, dynamicDimensions]);
 
   const { data: rowData, loading } = useCubeData(query);
 
@@ -71,6 +73,25 @@ const DataView = () => {
     setDrilldownLevel(level);
     setFilters(filters.slice(0, level));
   };
+
+  const handleColumnVisible = useCallback((event) => {
+    const { column, visible } = event;
+    if (!column) return;
+
+    const colDef = column.getColDef();
+    if (colDef.isDynamic) {
+      const dimension = colDef.dimension;
+      setDynamicDimensions(prev => {
+        const newDimensions = new Set(prev);
+        if (visible) {
+          newDimensions.add(dimension);
+        } else {
+          newDimensions.delete(dimension);
+        }
+        return [...newDimensions];
+      });
+    }
+  }, []);
 
   const handleRowClicked = useCallback((event) => {
     const { drillDownField } = currentLevelDef;
@@ -136,6 +157,7 @@ const DataView = () => {
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             onColumnPivotModeChanged={onColumnPivotModeChanged}
+            onColumnVisible={handleColumnVisible}
           />
         </div>
       </div>
