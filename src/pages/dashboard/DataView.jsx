@@ -148,7 +148,6 @@ const DataView = () => {
     };
   }, []);
 
-
   return (
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
@@ -173,6 +172,7 @@ const DataView = () => {
             onColumnPivotModeChanged={onColumnPivotModeChanged}
             onColumnVisible={handleColumnVisible}
             statusBar={statusBar}
+            grandTotalRow={"pinnedBottom"}
           />
         </div>
       </div>
