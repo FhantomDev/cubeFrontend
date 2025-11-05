@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const breadcrumbStyles = {
-  padding: '8px 15px',
+  padding: '8px 10px',
   marginBottom: '20px',
   listStyle: 'none',
   backgroundColor: '#f5f5f5',

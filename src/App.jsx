@@ -9,7 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
-    <main style={{ padding: '20px' }}>
+    <main style={{ padding: '6px' }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>

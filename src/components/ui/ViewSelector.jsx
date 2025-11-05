@@ -2,7 +2,7 @@ import React from 'react';
 
 const ViewSelector = ({ views, selectedView, setSelectedView }) => {
   return (
-    <div style={{ marginBottom: '1rem' }}>
+    <div style={{ alignItems: 'center', marginLeft: '10px' }}>
       {views.map(view => (
         <button
           key={view.id}

@@ -158,8 +158,8 @@ const DataView = () => {
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-        <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
-        <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+        <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} style={{ marginRight: '10px' }} />
+        <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} style={{ marginLeft: '10px' }} />
       </div>
       <div style={{ width: "100%", height: "calc(100vh - 160px)" }}>
         <div style={{ height: "100%", width: "100%" }}>

@@ -14,9 +14,9 @@ const MonthFilter = ({ selectedMonth, setSelectedMonth }) => {
   if (error) return <p>Error al cargar meses</p>;
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-      <label htmlFor="month-select">Mes:</label>
-      <select id="month-select" value={selectedMonth || ''} onChange={(e) => setSelectedMonth(e.target.value)}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '10px' }}>
+          <label htmlFor="month-select">Mes:</label>
+          <select id="month-select" value={selectedMonth || ''} onChange={(e) => setSelectedMonth(e.target.value)} style={{ backgroundColor: '#e0f7fa' }}>
         {months.map(month => (
           <option key={month} value={month}>{month}</option>
         ))}
