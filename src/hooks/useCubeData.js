@@ -1,12 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import cubeApi from '../api/cube';
 
-const useCubeData = (query) => {
+export const useCubeData = (query, isQueryReady = true) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const queryKey = useMemo(() => JSON.stringify(query), [query]);
+
   useEffect(() => {
+    if (!isQueryReady) {
+      setData([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     cubeApi
       .load(query)
@@ -18,9 +25,34 @@ const useCubeData = (query) => {
         setError(error);
         setLoading(false);
       });
-  }, [JSON.stringify(query)]); // Vuelve a ejecutar el efecto si la consulta cambia
+  }, [queryKey, isQueryReady]);
 
   return { data, loading, error };
 };
 
-export default useCubeData;
+export const useCubeMonths = () => {
+  const [months, setMonths] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    cubeApi.load({
+      "dimensions": [
+        "detalle_factura.fecha_year_month"
+      ],
+      "order": {
+        "detalle_factura.fecha_year_month": "desc"
+      }
+    }).then(resultSet => {
+      const monthData = resultSet.tablePivot().map(row => row['detalle_factura.fecha_year_month']);
+      setMonths(monthData);
+      setLoading(false);
+    }).catch(error => {
+      setError(error);
+      setLoading(false);
+    });
+  }, []);
+
+  return { months, loading, error };
+};

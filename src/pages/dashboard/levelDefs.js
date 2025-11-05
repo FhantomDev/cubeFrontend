@@ -67,26 +67,4 @@ export const levelDefs = {
       ],
     },
   },
-  factura: {
-    0: {
-      dimensions: ["detalle_factura.fecha_year_month"],
-      measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum"],
-      columnDefs: [
-        { headerName: "Fecha Factura", valueGetter: p => p.data ? p.data["detalle_factura.fecha_year_month"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
-        { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
-      ],
-      drillDownField: "detalle_factura.fecha_year_month",
-    },
-    1: {
-      dimensions: ["detalle_factura.fecha_factura"],
-      measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum"],
-      columnDefs: [
-        { headerName: "Fecha Factura", valueGetter: p => p.data ? p.data["detalle_factura.fecha_factura"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
-        { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
-      ],
-      drillDownField: "detalle_factura.fecha_factura",
-    }
-  }
 };

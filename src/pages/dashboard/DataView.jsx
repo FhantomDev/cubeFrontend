@@ -7,9 +7,10 @@ import { AgGridReact } from "ag-grid-react";
 import { themeCostum } from "../../styles/theme";
 import Breadcrumb from "../../components/common/Breadcrumb";
 import { levelDefs } from "./levelDefs";
-import useCubeData from "../../hooks/useCubeData";
+import { useCubeData } from "../../hooks/useCubeData";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector";
+import MonthFilter from "../../components/ui/MonthFilter";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
@@ -20,7 +21,6 @@ const breadcrumbNameMap = {
 const views = [
   { id: 'categoria', name: 'Categoría' },
   { id: 'cliente', name: 'Cliente' },
-  { id: 'factura', name: 'Factura' },
 ];
 
 const DataView = () => {
@@ -29,6 +29,7 @@ const DataView = () => {
   const [filters, setFilters] = useState([]);
   const [selectedView, setSelectedView] = useState('categoria');
   const [dynamicDimensions, setDynamicDimensions] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
   const location = useLocation();
 
@@ -41,13 +42,21 @@ const DataView = () => {
     setDynamicDimensions([]);
   };
 
-  const query = useMemo(() => ({
-    dimensions: [...currentLevelDef.dimensions, ...dynamicDimensions],
-    measures: currentLevelDef.measures,
-    filters: filters,
-  }), [currentLevelDef, filters, dynamicDimensions]);
+  const query = useMemo(() => {
+    const monthFilter = selectedMonth ? [{
+      member: "detalle_factura.fecha_year_month",
+      operator: "equals",
+      values: [selectedMonth]
+    }] : [];
 
-  const { data: rowData, loading } = useCubeData(query);
+    return {
+      dimensions: [...currentLevelDef.dimensions, ...dynamicDimensions],
+      measures: currentLevelDef.measures,
+      filters: [...filters, ...monthFilter],
+    };
+  }, [currentLevelDef, filters, dynamicDimensions, selectedMonth]);
+
+  const { data: rowData, loading } = useCubeData(query, !!selectedMonth);
 
   const crumbs = useMemo(() => {
     const pathnames = location.pathname.split('/').filter((x) => x);
@@ -148,7 +157,10 @@ const DataView = () => {
   return (
     <div>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
-      <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+        <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+      </div>
       <div style={{ width: "100%", height: "calc(100vh - 160px)" }}>
         <div style={{ height: "100%", width: "100%" }}>
           <AgGridReact
