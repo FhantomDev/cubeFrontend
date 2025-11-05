@@ -20,6 +20,7 @@ const breadcrumbNameMap = {
 const views = [
   { id: 'categoria', name: 'Categoría' },
   { id: 'cliente', name: 'Cliente' },
+  { id: 'factura', name: 'Factura' },
 ];
 
 const DataView = () => {
@@ -139,11 +140,7 @@ const DataView = () => {
   const statusBar = useMemo(() => {
     return {
       statusPanels: [
-        { statusPanel: 'agTotalAndFilteredRowCountComponent' },
         { statusPanel: 'agTotalRowCountComponent' },
-        { statusPanel: 'agFilteredRowCountComponent' },
-        { statusPanel: 'agSelectedRowCountComponent' },
-        { statusPanel: 'agAggregationComponent' }
       ]
     };
   }, []);
