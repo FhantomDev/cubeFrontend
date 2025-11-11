@@ -1,15 +1,13 @@
-import React, { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import DataView from "./pages/dashboard/DataView";
 import Home from "./pages/home/Home";
-import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
-    <main style={{ padding: '6px' }}>
+    <main style={{ minHeight: '100vh' }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>
@@ -21,13 +19,4 @@ function App() {
   );
 }
 
-const root = createRoot(document.getElementById("root"));
-root.render(
-  <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
-  </StrictMode>
-);
+export default App;

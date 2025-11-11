@@ -154,15 +154,112 @@ const DataView = () => {
     };
   }, []);
 
+  const containerStyles = {
+    padding: '1.5rem',
+    background: 'linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)',
+    minHeight: '100vh',
+  };
+
+  const headerStyles = {
+    background: 'white',
+    borderRadius: '1rem',
+    padding: '1.5rem',
+    marginBottom: '1.5rem',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+  };
+
+  const titleStyles = {
+    fontSize: '1.75rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+  };
+
+  const dashboardLogoStyles = {
+    height: '50px',
+    width: 'auto',
+  };
+
+  const controlsStyles = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '1rem',
+  };
+
+  const backButtonStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.5rem 0',
+    fontSize: '1rem',
+    fontWeight: '600',
+    border: 'none',
+    background: 'transparent',
+    color: '#3b82f6',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    textDecoration: 'none',
+    textShadow: '0 0 8px rgba(59, 130, 246, 0.5)',
+  };
+
+  const gridContainerStyles = {
+    background: 'white',
+    borderRadius: '1rem',
+    padding: '1.5rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    height: 'calc(100vh - 300px)',
+  };
+
+  const gridWrapperStyles = {
+    height: '100%',
+    width: '100%',
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
+  };
+
   return (
-    <div>
+    <div style={containerStyles}>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-        <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} style={{ marginRight: '10px' }} />
-        <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} style={{ marginLeft: '10px' }} />
+
+      <div style={headerStyles}>
+        {drilldownLevel > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <button
+              onClick={() => handleBreadcrumbClick(drilldownLevel - 1)}
+              style={backButtonStyles}
+              onMouseEnter={(e) => {
+                e.target.style.textShadow = '0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.4)';
+                e.target.style.color = '#2563eb';
+                e.target.style.textDecoration = 'underline';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.textShadow = '0 0 8px rgba(59, 130, 246, 0.5)';
+                e.target.style.color = '#3b82f6';
+                e.target.style.textDecoration = 'none';
+              }}
+            >
+              <span>←</span>
+              <span>Volver de: <strong>{filters[filters.length - 1]?.values[0]}</strong></span>
+            </button>
+          </div>
+        )}
+        <h1 style={titleStyles}>
+          <img src="/logo-icbfs.png" alt="ICB Food Services" style={dashboardLogoStyles} />
+          <span>Panel de Ventas</span>
+        </h1>
+        <div style={controlsStyles}>
+          <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+          <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+        </div>
       </div>
-      <div style={{ width: "100%", height: "calc(100vh - 160px)" }}>
-        <div style={{ height: "100%", width: "100%" }}>
+
+      <div style={gridContainerStyles}>
+        <div style={gridWrapperStyles}>
           <AgGridReact
             ref={gridRef}
             theme={themeCostum}

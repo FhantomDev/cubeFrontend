@@ -15,7 +15,7 @@ export const levelDefs = {
       ],
       columnDefs: [
         { headerName: "Categoría de Producto", valueGetter: p => p.data ? p.data["detalle_factura.categoria"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
+        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Ajuste", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Promo Venta", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_promo_venta_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
@@ -35,7 +35,7 @@ export const levelDefs = {
       ],
       columnDefs: [
         { headerName: "Nombre de Producto", valueGetter: p => p.data ? p.data["detalle_factura.nombre_producto"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
+        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Ajuste", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Promo Venta", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_promo_venta_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
@@ -57,7 +57,7 @@ export const levelDefs = {
       ],
       columnDefs: [
         { headerName: "ID Cliente", valueGetter: p => p.data ? p.data["detalle_factura.id_cliente"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
+        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Ajuste", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Promo Venta", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_promo_venta_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
@@ -71,7 +71,7 @@ export const levelDefs = {
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum"],
       columnDefs: [
         { headerName: "Nombre de Producto", valueGetter: p => p.data ? p.data["detalle_factura.nombre_producto"] : '', enableRowGroup: true },
-        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
+        { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
       ],
     },
