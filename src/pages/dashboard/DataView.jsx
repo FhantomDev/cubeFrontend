@@ -155,7 +155,7 @@ const DataView = () => {
   }, []);
 
   const containerStyles = {
-    padding: '1.5rem',
+    padding: '0.5rem',
     background: 'linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)',
     minHeight: '100vh',
   };
