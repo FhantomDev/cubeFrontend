@@ -21,6 +21,10 @@ const breadcrumbNameMap = {
 const views = [
   { id: 'categoria', name: 'Categoría' },
   { id: 'cliente', name: 'Cliente' },
+  { id: 'vendedor', name: 'Vendedor' },
+  { id: 'canal', name: 'Canal' },
+  { id: 'zona', name: 'Zona' },
+  { id: 'marca', name: 'Marca' },
 ];
 
 const DataView = () => {
