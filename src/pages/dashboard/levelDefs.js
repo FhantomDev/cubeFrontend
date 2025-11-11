@@ -6,7 +6,7 @@ const currencyFormatter = new Intl.NumberFormat('es-CL', {
 export const levelDefs = {
   categoria: {
     0: {
-      dimensions: ["detalle_factura.categoria"],
+      dimensions: ["detalle_factura.categoria", "detalle_factura.sociedad"],
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
         "detalle_factura.dcto_ajuste_sum",
         "detalle_factura.dcto_promo_venta_sum",
@@ -20,6 +20,7 @@ export const levelDefs = {
       ],
       columnDefs: [
         { headerName: "Categoría", field: "detalle_factura.categoria", valueGetter: p => p.data ? p.data["detalle_factura.categoria"] : '', enableRowGroup: true, filter: 'agSetColumnFilter' },
+        { headerName: "Sociedad", field: "detalle_factura.sociedad", valueGetter: p => p.data ? p.data["detalle_factura.sociedad"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', hide: true },
         { headerName: "Valor Neto", field: "detalle_factura.valor_neto_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc', filter: 'agNumberColumnFilter' },
         { headerName: "Costo Estandar", field: "detalle_factura.costo_estandar_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
         { headerName: "Descuento Ajuste", field: "detalle_factura.dcto_ajuste_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
