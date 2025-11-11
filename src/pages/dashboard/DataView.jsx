@@ -134,7 +134,6 @@ const DataView = () => {
       flex: 1,
       minWidth: 150,
       sortable: true,
-      filter: true,
       resizable: true,
       enablePivot: true,
     }),
