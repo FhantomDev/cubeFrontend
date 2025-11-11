@@ -12,9 +12,14 @@ export const levelDefs = {
         "detalle_factura.dcto_promo_venta_sum",
         "detalle_factura.factor_conversion_sum",
         "detalle_factura.peso_neto_sum",
+        "detalle_factura.cliente_count",
+        "detalle_factura.sku_count",
+        "detalle_factura.ratio_sku_cliente",
+        "detalle_factura.margen_valor",
+        "detalle_factura.margen_porcentaje"
       ],
       columnDefs: [
-        { headerName: "Categoría de Producto", valueGetter: p => p.data ? p.data["detalle_factura.categoria"] : '', enableRowGroup: true },
+        { headerName: "Categoría", valueGetter: p => p.data ? p.data["detalle_factura.categoria"] : '', enableRowGroup: true },
         { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Ajuste", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
@@ -22,6 +27,11 @@ export const levelDefs = {
         { headerName: "Factor Conversion", valueGetter: p => p.data ? Number(p.data["detalle_factura.factor_conversion_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Peso Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.peso_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => `${p.value.toFixed(2)} kg` },
         { headerName: "ID Cliente", valueGetter: p => p.data ? p.data["detalle_factura.id_cliente"] : '', enableRowGroup: true, hide: true, isDynamic: true, dimension: "detalle_factura.id_cliente" },
+        { headerName: "Clientes", valueGetter: p => p.data ? Number(p.data["detalle_factura.cliente_count"]) : 0, aggFunc: 'sum', enableValue: true },
+        { headerName: "SKUs", valueGetter: p => p.data ? Number(p.data["detalle_factura.sku_count"]) : 0, aggFunc: 'sum', enableValue: true },
+        { headerName: "SKU/Cliente", valueGetter: p => p.data ? Number(p.data["detalle_factura.ratio_sku_cliente"]) : 0, aggFunc: 'avg', enableValue: true },
+        { headerName: "Margen", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_valor"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
+        { headerName: "Margen (%)", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_porcentaje"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %` },
       ],
       drillDownField: "detalle_factura.categoria",
     },
@@ -48,7 +58,7 @@ export const levelDefs = {
   },
   cliente: {
     0: {
-      dimensions: ["detalle_factura.id_cliente"],
+      dimensions: ["detalle_factura.nombre_cliente"],
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
         "detalle_factura.dcto_ajuste_sum",
         "detalle_factura.dcto_promo_venta_sum",
@@ -56,7 +66,7 @@ export const levelDefs = {
         "detalle_factura.peso_neto_sum",
       ],
       columnDefs: [
-        { headerName: "ID Cliente", valueGetter: p => p.data ? p.data["detalle_factura.id_cliente"] : '', enableRowGroup: true },
+        { headerName: "Cliente", valueGetter: p => p.data ? p.data["detalle_factura.nombre_cliente"] : '', enableRowGroup: true },
         { headerName: "Valor Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc' },
         { headerName: "Costo Estandar", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Descuento Ajuste", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
@@ -64,7 +74,7 @@ export const levelDefs = {
         { headerName: "Factor Conversion", valueGetter: p => p.data ? Number(p.data["detalle_factura.factor_conversion_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value) },
         { headerName: "Peso Neto", valueGetter: p => p.data ? Number(p.data["detalle_factura.peso_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => `${p.value.toFixed(2)} kg` },
       ],
-      drillDownField: "detalle_factura.id_cliente",
+      drillDownField: "detalle_factura.nombre_cliente",
     },
     1: {
       dimensions: ["detalle_factura.nombre_producto"],
