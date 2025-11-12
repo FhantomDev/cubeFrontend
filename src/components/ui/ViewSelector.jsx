@@ -1,50 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const containerStyles = {
-  display: 'flex',
-  gap: '0.5rem',
-  padding: '0.25rem',
-  background: '#f1f5f9',
-  borderRadius: '0.75rem',
-  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-};
-
-const getButtonStyles = (isSelected, isHovering) => ({
+const selectStyles = {
   padding: '0.625rem 1.25rem',
   fontSize: '0.925rem',
   fontWeight: '600',
-  border: 'none',
+  border: '1px solid #e2e8f0',
   borderRadius: '0.5rem',
   cursor: 'pointer',
   transition: 'all 0.2s ease',
-  background: isSelected
-    ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'
-    : 'transparent',
-  color: isSelected ? 'white' : '#64748b',
-  boxShadow: isSelected ? '0 2px 8px rgba(239, 68, 68, 0.3)' : 'none',
-  transform: isHovering && !isSelected ? 'translateY(-1px)' : 'translateY(0)',
-});
+  background: 'white',
+  color: '#64748b',
+  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+};
 
 const ViewSelector = ({ views, selectedView, setSelectedView }) => {
-  const [hoveredView, setHoveredView] = useState(null);
+  const handleViewChange = (e) => {
+    setSelectedView(e.target.value);
+  };
 
   return (
-    <div style={containerStyles}>
+    <select
+      value={selectedView}
+      onChange={handleViewChange}
+      style={selectStyles}
+    >
       {views.map(view => (
-        <button
-          key={view.id}
-          onClick={() => setSelectedView(view.id)}
-          onMouseEnter={() => setHoveredView(view.id)}
-          onMouseLeave={() => setHoveredView(null)}
-          style={getButtonStyles(
-            selectedView === view.id,
-            hoveredView === view.id
-          )}
-        >
+        <option key={view.id} value={view.id}>
           {view.name}
-        </button>
+        </option>
       ))}
-    </div>
+    </select>
   );
 };
 

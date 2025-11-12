@@ -25,6 +25,14 @@ const views = [
   { id: 'canal', name: 'Canal' },
   { id: 'zona', name: 'Zona' },
   { id: 'marca', name: 'Marca' },
+  { id: 'centro', name: 'Centro Suministrador' },
+  { id: 'numero_factura', name: 'Factura' },
+  { id: 'familia', name: 'Familia' },
+  { id: 'jefe_categoria', name: 'Jefe Categoría' },
+  { id: 'region', name: 'Región' },
+  { id: 'origen', name: 'Sistema Orígen' },
+  { id: 'sociedad', name: 'Sociedad' },
+  { id: 'um_venta', name: 'Unidad Medida Venta' },
 ];
 
 const DataView = () => {
@@ -188,7 +196,7 @@ const DataView = () => {
 
   const controlsStyles = {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '1rem',
@@ -255,8 +263,16 @@ const DataView = () => {
           <img src="/logo-icbfs.png" alt="ICB Food Services" style={dashboardLogoStyles} />
           <span>Panel de Ventas</span>
         </h1>
-        <div style={controlsStyles}>
-          <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label htmlFor="view-selector" style={{ fontSize: '0.925rem', fontWeight: '600', color: '#64748b' }}>
+              Vistas:
+            </label>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#64748b' }}>
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
+          </div>
           <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
         </div>
       </div>
