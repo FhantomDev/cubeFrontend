@@ -20,6 +20,7 @@
   align-items: center;
   width: 100%;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .dashboard-title {
@@ -74,7 +75,7 @@
 .grid-container {
   background: white;
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 0.8rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   height: 100vh
 }
