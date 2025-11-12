@@ -14,7 +14,6 @@ const dropdownHeaderStyles = {
   fontWeight: '500',
   border: '1px solid #e2e8f0',
   borderRadius: '0.5rem',
-  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
   color: '#1e293b',
   cursor: 'pointer',
   outline: 'none',

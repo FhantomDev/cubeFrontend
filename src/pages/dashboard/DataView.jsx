@@ -10,6 +10,7 @@ import { levelDefs } from "./levelDefs";
 import { useCubeData } from "../../hooks/useCubeData";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector";
+import RappelToggle from "../../components/ui/RappelToggle";
 import MonthFilter from "../../components/ui/MonthFilter";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
@@ -42,6 +43,7 @@ const DataView = () => {
   const [selectedView, setSelectedView] = useState('categoria');
   const [dynamicDimensions, setDynamicDimensions] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState([]);
+  const [isRappelActive, setIsRappelActive] = useState(false);
 
   const location = useLocation();
 
@@ -61,12 +63,40 @@ const DataView = () => {
       values: selectedMonth
     }] : [];
 
+    const measures = isRappelActive
+      ? currentLevelDef.measures.map(m => m === "detalle_factura.valor_neto_sum" ? "detalle_factura.resta_rappel" : m)
+      : currentLevelDef.measures;
+
     return {
       dimensions: [...currentLevelDef.dimensions, ...dynamicDimensions],
-      measures: currentLevelDef.measures,
+      measures: measures,
       filters: [...filters, ...monthFilter],
     };
-  }, [currentLevelDef, filters, dynamicDimensions, selectedMonth]);
+  }, [currentLevelDef, filters, dynamicDimensions, selectedMonth, isRappelActive]);
+
+  const dynamicColumnDefs = useMemo(() => {
+    if (!currentLevelDef) return [];
+    return currentLevelDef.columnDefs.map(colDef => {
+      if (colDef.field === "detalle_factura.valor_neto_sum") {
+        if (isRappelActive) {
+          return {
+            ...colDef,
+            headerName: "Venta (Rappel)",
+            field: "detalle_factura.resta_rappel",
+            valueGetter: p => p.data ? Number(p.data["detalle_factura.resta_rappel"]) : 0,
+          };
+        }
+        // Return to default if rappel is not active
+        return {
+          ...colDef,
+          headerName: "Venta",
+          field: "detalle_factura.valor_neto_sum",
+          valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0,
+        };
+      }
+      return colDef;
+    });
+  }, [currentLevelDef, isRappelActive]);
 
   const { data: rowData, loading } = useCubeData(query, selectedMonth.length > 0);
 
@@ -266,6 +296,7 @@ const DataView = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
           <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
+          <RappelToggle onToggle={setIsRappelActive} />
         </div>
       </div>
 
@@ -276,7 +307,7 @@ const DataView = () => {
             theme={themeCostum}
             rowData={rowData}
             loading={loading}
-            columnDefs={currentLevelDef.columnDefs}
+            columnDefs={dynamicColumnDefs}
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClicked}
             pivotPanelShow="always"
