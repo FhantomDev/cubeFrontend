@@ -20,19 +20,19 @@ const breadcrumbNameMap = {
 
 const views = [
   { id: 'categoria', name: 'Categoría' },
-  { id: 'cliente', name: 'Cliente' },
-  { id: 'vendedor', name: 'Vendedor' },
-  { id: 'canal', name: 'Canal' },
-  { id: 'zona', name: 'Zona' },
-  { id: 'marca', name: 'Marca' },
   { id: 'centro', name: 'Centro Suministrador' },
+  { id: 'cliente', name: 'Cliente' },
   { id: 'numero_factura', name: 'Factura' },
   { id: 'familia', name: 'Familia' },
   { id: 'jefe_categoria', name: 'Jefe Categoría' },
+  { id: 'marca', name: 'Marca' },
   { id: 'region', name: 'Región' },
   { id: 'origen', name: 'Sistema Orígen' },
   { id: 'sociedad', name: 'Sociedad' },
   { id: 'um_venta', name: 'Unidad Medida Venta' },
+  { id: 'vendedor', name: 'Vendedor' },
+  { id: 'canal', name: 'Canal' },
+  { id: 'zona', name: 'Zona' },
 ];
 
 const DataView = () => {
@@ -41,7 +41,7 @@ const DataView = () => {
   const [filters, setFilters] = useState([]);
   const [selectedView, setSelectedView] = useState('categoria');
   const [dynamicDimensions, setDynamicDimensions] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState([]);
 
   const location = useLocation();
 
@@ -55,10 +55,10 @@ const DataView = () => {
   };
 
   const query = useMemo(() => {
-    const monthFilter = selectedMonth ? [{
+    const monthFilter = selectedMonth.length > 0 ? [{
       member: "detalle_factura.fecha_year_month",
-      operator: "equals",
-      values: [selectedMonth]
+      operator: "in",
+      values: selectedMonth
     }] : [];
 
     return {
@@ -68,7 +68,7 @@ const DataView = () => {
     };
   }, [currentLevelDef, filters, dynamicDimensions, selectedMonth]);
 
-  const { data: rowData, loading } = useCubeData(query, !!selectedMonth);
+  const { data: rowData, loading } = useCubeData(query, selectedMonth.length > 0);
 
   const crumbs = useMemo(() => {
     const pathnames = location.pathname.split('/').filter((x) => x);
