@@ -20,18 +20,23 @@ const breadcrumbNameMap = {
 };
 
 const views = [
+  { id: 'vendedor', name: 'Asesor' },
   { id: 'categoria', name: 'Categoría' },
   { id: 'centro', name: 'Centro Suministrador' },
   { id: 'cliente', name: 'Cliente' },
+  // dia
+  { id: 'direccion', name: 'Dirección' },
+  { id: 'especialidad', name: 'Especialidad' },
   { id: 'numero_factura', name: 'Factura' },
   { id: 'familia', name: 'Familia' },
+  { id: 'gerencia', name: 'Gerencia' },
   { id: 'jefe_categoria', name: 'Jefe Categoría' },
   { id: 'marca', name: 'Marca' },
   { id: 'region', name: 'Región' },
   { id: 'origen', name: 'Sistema Orígen' },
   { id: 'sociedad', name: 'Sociedad' },
+  { id: 'sucursal', name: 'Sucursal' },
   { id: 'um_venta', name: 'Unidad Medida Venta' },
-  { id: 'vendedor', name: 'Vendedor' },
   { id: 'canal', name: 'Canal' },
   { id: 'zona', name: 'Zona' },
 ];
