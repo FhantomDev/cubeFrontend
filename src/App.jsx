@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import DataView from "./pages/dashboard/DataView";
+import Proyeccion from "./pages/dashboard/Proyeccion";
 import Home from "./pages/home/Home";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DataView />} />
+          <Route path="/dashboard" element={<Proyeccion />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>

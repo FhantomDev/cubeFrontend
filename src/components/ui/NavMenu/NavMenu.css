@@ -1,0 +1,26 @@
+.nav-menu {
+  display: flex;
+  padding-bottom: 1rem;
+}
+
+.nav-menu-item {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #475569;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-menu-item.active {
+  font-weight: 700;
+  color: #1e293b;
+  border-bottom-color: #ef4444;
+}
+
+.nav-menu-item:not(.active):hover {
+  color: #1e293b;
+}
