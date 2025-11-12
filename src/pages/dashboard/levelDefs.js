@@ -29,7 +29,7 @@ export const levelDefs = {
         { headerName: "ID Cliente", field: "detalle_factura.id_cliente", valueGetter: p => p.data ? p.data["detalle_factura.id_cliente"] : '', enableRowGroup: true, hide: true, isDynamic: true, dimension: "detalle_factura.id_cliente", filter: 'agSetColumnFilter' },
         { headerName: "Clientes", field: "detalle_factura.cliente_count", valueGetter: p => p.data ? Number(p.data["detalle_factura.cliente_count"]) : 0, aggFunc: 'sum', enableValue: true, filter: 'agNumberColumnFilter' },
         { headerName: "SKUs", field: "detalle_factura.sku_count", valueGetter: p => p.data ? Number(p.data["detalle_factura.sku_count"]) : 0, aggFunc: 'sum', enableValue: true, filter: 'agNumberColumnFilter' },
-        { headerName: "SKU / Cliente", field: "detalle_factura.ratio_sku_cliente", valueGetter: p => p.data ? Number(p.data["detalle_factura.ratio_sku_cliente"]) : 0, aggFunc: 'avg', enableValue: true, filter: 'agNumberColumnFilter' },
+        { headerName: "SKU / Cliente", field: "detalle_factura.ratio_sku_cliente", valueGetter: p => p.data ? Number(p.data["detalle_factura.ratio_sku_cliente"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %`, filter: 'agNumberColumnFilter' },
         { headerName: "Margen $", field: "detalle_factura.margen_valor", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_valor"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
         { headerName: "Margen %", field: "detalle_factura.margen_porcentaje", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_porcentaje"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %`, filter: 'agNumberColumnFilter' },
       ],
@@ -534,7 +534,7 @@ export const levelDefs = {
   },
   gerencia: {
     0: {
-      dimensions: ["detalle_factura.zona_ventas", "detalle_factura.sociedad"],
+      dimensions: ["detalle_factura.zona_ventas"],
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
         "detalle_factura.dcto_ajuste_sum",
         "detalle_factura.dcto_promo_venta_sum",
@@ -598,7 +598,7 @@ export const levelDefs = {
   },
   holding: {
     0: {
-      dimensions: ["detalle_factura.nombre_holding", "detalle_factura.sociedad"],
+      dimensions: ["detalle_factura.nombre_holding"],
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
         "detalle_factura.dcto_ajuste_sum",
         "detalle_factura.dcto_promo_venta_sum",

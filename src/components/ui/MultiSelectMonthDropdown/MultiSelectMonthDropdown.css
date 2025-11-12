@@ -1,0 +1,57 @@
+.multi-select-month-dropdown-container {
+  position: relative;
+  width: 200px;
+}
+
+.multi-select-month-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.925rem;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  color: #1e293b;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.multi-select-month-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-top: 0.5rem;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.multi-select-month-dropdown-search-input {
+  width: calc(100% - 2rem);
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  margin: 0.5rem 1rem;
+  outline: none;
+}
+
+.multi-select-month-dropdown-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.multi-select-month-dropdown-checkbox-input {
+  cursor: pointer;
+}

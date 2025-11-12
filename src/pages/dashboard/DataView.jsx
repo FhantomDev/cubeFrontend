@@ -9,9 +9,9 @@ import Breadcrumb from "../../components/common/Breadcrumb";
 import { levelDefs } from "./levelDefs";
 import { useCubeData } from "../../hooks/useCubeData";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
-import ViewSelector from "../../components/ui/ViewSelector";
-import RappelToggle from "../../components/ui/RappelToggle";
-import MonthFilter from "../../components/ui/MonthFilter";
+import ViewSelector from "../../components/ui/ViewSelector/ViewSelector";
+import RappelToggle from "../../components/ui/RappelToggle/RappelToggle";
+import MonthFilter from "../../components/ui/MonthFilter/MonthFilter";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
@@ -299,7 +299,7 @@ const DataView = () => {
           <img src="/logo-icbfs.png" alt="ICB Food Services" style={dashboardLogoStyles} />
           <span>Panel de Ventas</span>
         </h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-start', gap: '1.5rem' }}>
           <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />
           <MonthFilter selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
           <RappelToggle onToggle={setIsRappelActive} />

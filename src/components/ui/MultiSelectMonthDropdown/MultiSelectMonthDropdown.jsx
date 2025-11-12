@@ -1,61 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
-const dropdownContainerStyles = {
-  position: 'relative',
-  width: '200px', // Adjust as needed
-};
-
-const dropdownHeaderStyles = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '0.5rem 1rem',
-  fontSize: '0.925rem',
-  fontWeight: '500',
-  border: '1px solid #e2e8f0',
-  borderRadius: '0.5rem',
-  color: '#1e293b',
-  cursor: 'pointer',
-  outline: 'none',
-  transition: 'all 0.2s ease',
-  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-};
-
-const dropdownListStyles = {
-  position: 'absolute',
-  top: '100%',
-  left: '0',
-  right: '0',
-  zIndex: '10',
-  background: '#ffffff',
-  border: '1px solid #e2e8f0',
-  borderRadius: '0.5rem',
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-  marginTop: '0.5rem',
-  maxHeight: '250px',
-  overflowY: 'auto',
-};
-
-const searchInputStyles = {
-  width: 'calc(100% - 2rem)',
-  padding: '0.5rem 1rem',
-  border: '1px solid #e2e8f0',
-  borderRadius: '0.5rem',
-  margin: '0.5rem 1rem',
-  outline: 'none',
-};
-
-const checkboxItemStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-  padding: '0.5rem 1rem',
-  cursor: 'pointer',
-};
-
-const checkboxInputStyles = {
-  cursor: 'pointer',
-};
+import './MultiSelectMonthDropdown.css';
 
 const MultiSelectMonthDropdown = ({ options, selectedValues, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,29 +44,29 @@ const MultiSelectMonthDropdown = ({ options, selectedValues, onChange }) => {
     : 'Seleccionar mes(es)';
 
   return (
-    <div style={dropdownContainerStyles} ref={dropdownRef}>
-      <div style={dropdownHeaderStyles} onClick={handleHeaderClick}>
+    <div className="multi-select-month-dropdown-container" ref={dropdownRef}>
+      <div className="multi-select-month-dropdown-header" onClick={handleHeaderClick}>
         <span>{displayValue}</span>
         <span>{isOpen ? '▲' : '▼'}</span>
       </div>
 
       {isOpen && (
-        <div style={dropdownListStyles}>
+        <div className="multi-select-month-dropdown-list">
           <input
             type="text"
             placeholder="Buscar valor"
-            style={searchInputStyles}
+            className="multi-select-month-dropdown-search-input"
             value={searchTerm}
             onChange={handleSearchChange}
           />
           {filteredOptions.map((option) => (
-            <label key={option} style={checkboxItemStyles}>
+            <label key={option} className="multi-select-month-dropdown-checkbox-item">
               <input
                 type="checkbox"
                 value={option}
                 checked={selectedValues.includes(option)}
                 onChange={handleCheckboxChange}
-                style={checkboxInputStyles}
+                className="multi-select-month-dropdown-checkbox-input"
               />
               {option}
             </label>
