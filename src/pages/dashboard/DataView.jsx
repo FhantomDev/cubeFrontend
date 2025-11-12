@@ -30,6 +30,7 @@ const views = [
   { id: 'numero_factura', name: 'Factura' },
   { id: 'familia', name: 'Familia' },
   { id: 'gerencia', name: 'Gerencia' },
+  { id: 'holding', name: 'Holding' },
   { id: 'jefe_categoria', name: 'Jefe Categoría' },
   { id: 'marca', name: 'Marca' },
   { id: 'region', name: 'Región' },

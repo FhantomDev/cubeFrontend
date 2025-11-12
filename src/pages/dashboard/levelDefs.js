@@ -534,7 +534,7 @@ export const levelDefs = {
   },
   gerencia: {
     0: {
-      dimensions: ["detalle_factura.gerencia", "detalle_factura.sociedad"],
+      dimensions: ["detalle_factura.zona_ventas", "detalle_factura.sociedad"],
       measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
         "detalle_factura.dcto_ajuste_sum",
         "detalle_factura.dcto_promo_venta_sum",
@@ -547,7 +547,7 @@ export const levelDefs = {
         "detalle_factura.margen_porcentaje"
       ],
       columnDefs: [
-        { headerName: "Gerencia", field: "detalle_factura.gerencia", valueGetter: p => p.data ? p.data["detalle_factura.gerencia"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', minWidth: 270 },
+        { headerName: "Gerencia", field: "detalle_factura.zona_ventas", valueGetter: p => p.data ? p.data["detalle_factura.zona_ventas"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', minWidth: 270 },
         { headerName: "Sociedad", field: "detalle_factura.sociedad", valueGetter: p => p.data ? p.data["detalle_factura.sociedad"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', hide: true },
         { headerName: "Venta", field: "detalle_factura.valor_neto_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc', filter: 'agNumberColumnFilter' },
         { headerName: "Costo", field: "detalle_factura.costo_estandar_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
@@ -561,7 +561,7 @@ export const levelDefs = {
         { headerName: "Margen $", field: "detalle_factura.margen_valor", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_valor"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
         { headerName: "Margen %", field: "detalle_factura.margen_porcentaje", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_porcentaje"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %`, filter: 'agNumberColumnFilter' },
       ],
-      drillDownField: "detalle_factura.gerencia",
+      drillDownField: "detalle_factura.zona_ventas",
     },
   },
   sucursal: {
@@ -594,6 +594,38 @@ export const levelDefs = {
         { headerName: "Margen %", field: "detalle_factura.margen_porcentaje", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_porcentaje"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %`, filter: 'agNumberColumnFilter' },
       ],
       drillDownField: "detalle_factura.oficina_ventas",
+    },
+  },
+  holding: {
+    0: {
+      dimensions: ["detalle_factura.nombre_holding", "detalle_factura.sociedad"],
+      measures: ["detalle_factura.valor_neto_sum", "detalle_factura.costo_estandar_sum",
+        "detalle_factura.dcto_ajuste_sum",
+        "detalle_factura.dcto_promo_venta_sum",
+        "detalle_factura.factor_conversion_sum",
+        "detalle_factura.peso_neto_sum",
+        "detalle_factura.cliente_count",
+        "detalle_factura.sku_count",
+        "detalle_factura.ratio_sku_cliente",
+        "detalle_factura.margen_valor",
+        "detalle_factura.margen_porcentaje"
+      ],
+      columnDefs: [
+        { headerName: "Holding", field: "detalle_factura.nombre_holding", valueGetter: p => p.data ? p.data["detalle_factura.nombre_holding"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', minWidth: 270 },
+        { headerName: "Sociedad", field: "detalle_factura.sociedad", valueGetter: p => p.data ? p.data["detalle_factura.sociedad"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', hide: true },
+        { headerName: "Venta", field: "detalle_factura.valor_neto_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc', filter: 'agNumberColumnFilter' },
+        { headerName: "Costo", field: "detalle_factura.costo_estandar_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.costo_estandar_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
+        { headerName: "Dcto. Ajuste", field: "detalle_factura.dcto_ajuste_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_ajuste_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
+        { headerName: "Dcto Promo", field: "detalle_factura.dcto_promo_venta_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.dcto_promo_venta_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
+        { headerName: "Peso", field: "detalle_factura.peso_neto_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.peso_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} kg`, filter: 'agNumberColumnFilter' },
+        { headerName: "ID Cliente", field: "detalle_factura.id_cliente", valueGetter: p => p.data ? p.data["detalle_factura.id_cliente"] : '', enableRowGroup: true, hide: true, isDynamic: true, dimension: "detalle_factura.id_cliente", filter: 'agSetColumnFilter' },
+        { headerName: "Clientes", field: "detalle_factura.cliente_count", valueGetter: p => p.data ? Number(p.data["detalle_factura.cliente_count"]) : 0, aggFunc: 'sum', enableValue: true, filter: 'agNumberColumnFilter' },
+        { headerName: "SKUs", field: "detalle_factura.sku_count", valueGetter: p => p.data ? Number(p.data["detalle_factura.sku_count"]) : 0, aggFunc: 'sum', enableValue: true, filter: 'agNumberColumnFilter' },
+        { headerName: "SKU / Cliente", field: "detalle_factura.ratio_sku_cliente", valueGetter: p => p.data ? Number(p.data["detalle_factura.ratio_sku_cliente"]) : 0, aggFunc: 'avg', enableValue: true, filter: 'agNumberColumnFilter' },
+        { headerName: "Margen $", field: "detalle_factura.margen_valor", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_valor"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
+        { headerName: "Margen %", field: "detalle_factura.margen_porcentaje", valueGetter: p => p.data ? Number(p.data["detalle_factura.margen_porcentaje"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => `${Number(p.value).toFixed(2)} %`, filter: 'agNumberColumnFilter' },
+      ],
+      drillDownField: "detalle_factura.nombre_holding",
     },
   },
 };
