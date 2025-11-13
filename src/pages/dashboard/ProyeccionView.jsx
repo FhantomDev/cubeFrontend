@@ -9,14 +9,13 @@ import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector/ViewSelector";
 import RappelToggle from "../../components/ui/RappelToggle/RappelToggle";
 import MonthFilter from "../../components/ui/MonthFilter/MonthFilter";
-import NavMenu from "../../components/ui/NavMenu/NavMenu";
 import { useDashboard } from "../../hooks/useDashboard";
 import { views } from "./dashboardConstants";
 import "../../styles/Dashboard.css";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
-const Proyeccion = () => {
+const ProyeccionView = () => {
   const gridRef = useRef();
   const {
     drilldownLevel,
@@ -50,11 +49,10 @@ const Proyeccion = () => {
   }, [rowData, currentLevelDef]);
 
   return (
-    <div className="dashboard-container">
+    <>
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
 
       <div className="dashboard-header">
-        <NavMenu />
         {drilldownLevel > 0 && (
           <div className="back-button-container">
             <button
@@ -103,7 +101,7 @@ const Proyeccion = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
-export default Proyeccion;
+export default ProyeccionView;

@@ -1,30 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './NavMenu.css';
 
-const NavMenu = () => {
-  const [activeTab, setActiveTab] = useState('Proyección');
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
+const NavMenu = ({ activeTab, onTabClick }) => {
   return (
     <div className="nav-menu">
       <button
         className={`nav-menu-item ${activeTab === 'Proyección' ? 'active' : ''}`}
-        onClick={() => handleTabClick('Proyección')}
+        onClick={() => onTabClick('Proyección')}
       >
         Proyección
       </button>
       <button
         className={`nav-menu-item ${activeTab === 'Evolución' ? 'active' : ''}`}
-        onClick={() => handleTabClick('Evolución')}
+        onClick={() => onTabClick('Evolución')}
       >
         Evolución
       </button>
       <button
         className={`nav-menu-item ${activeTab === 'Comparativo' ? 'active' : ''}`}
-        onClick={() => handleTabClick('Comparativo')}
+        onClick={() => onTabClick('Comparativo')}
       >
         Comparativo
       </button>

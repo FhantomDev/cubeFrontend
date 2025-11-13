@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Proyeccion from "./pages/dashboard/Proyeccion";
+import DashboardPage from "./pages/dashboard/DashboardPage";
 import Home from "./pages/home/Home";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Proyeccion />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
