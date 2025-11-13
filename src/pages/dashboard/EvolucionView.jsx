@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from "react";
+import React, { useRef } from "react";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import { AllEnterpriseModule } from "ag-grid-enterprise";
 import { AgGridReact } from "ag-grid-react";
@@ -7,133 +7,32 @@ import { themeCostum } from "../../styles/theme";
 import Breadcrumb from "../../components/common/Breadcrumb";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector/ViewSelector";
-import MonthFilter from "../../components/ui/MonthFilter/MonthFilter";
 import MetricSelector from "../../components/ui/MetricSelector/MetricSelector";
-import { useCubeData, useCubeMonths } from "../../hooks/useCubeData";
+import { useEvolucion } from "../../hooks/useEvolucion";
 import { views } from "./dashboardConstants";
-import { levelDefs } from "./levelDefs";
 import "../../styles/Dashboard.css";
 
 ModuleRegistry.registerModules([AllCommunityModule, AllEnterpriseModule]);
 
 const EvolucionView = () => {
-  const [selectedView, setSelectedView] = useState('categoria');
-  const [selectedMetric, setSelectedMetric] = useState('detalle_factura.valor_neto_sum');
-  const [numMonths, setNumMonths] = useState(6);
-  const { months, loading: monthsLoading } = useCubeMonths();
-
-  const gridRef = React.useRef();
-
-  // Obtener los últimos N meses
-  const selectedMonths = useMemo(() => {
-    return months.slice(0, numMonths);
-  }, [months, numMonths]);
-
-  // Configuración de la vista actual
-  const currentLevelDef = useMemo(() => {
-    return levelDefs[selectedView]?.[0] || levelDefs.categoria[0];
-  }, [selectedView]);
-
-  // Query para obtener datos con dimensión + mes
-  const query = useMemo(() => {
-    const monthFilter = selectedMonths.length > 0 ? [{
-      member: "detalle_factura.fecha_year_month",
-      operator: "in",
-      values: selectedMonths
-    }] : [];
-
-    return {
-      dimensions: [currentLevelDef.dimensions[0], "detalle_factura.fecha_year_month"],
-      measures: [selectedMetric],
-      filters: monthFilter,
-      order: {
-        [currentLevelDef.dimensions[0]]: 'asc',
-      }
-    };
-  }, [currentLevelDef, selectedMetric, selectedMonths]);
-
-  const { data: rawData, loading } = useCubeData(query, selectedMonths.length > 0);
-
-  // Transformar datos para mostrar meses como columnas
-  const { rowData, columnDefs } = useMemo(() => {
-    if (!rawData || rawData.length === 0) {
-      return { rowData: [], columnDefs: [] };
-    }
-
-    // Obtener el nombre del campo principal (categoría, cliente, etc.)
-    const mainDimensionField = currentLevelDef.dimensions[0];
-    const metricField = selectedMetric;
-
-    // Agrupar datos por dimensión principal
-    const groupedData = {};
-    rawData.forEach(row => {
-      const key = row[mainDimensionField];
-      if (!groupedData[key]) {
-        groupedData[key] = {
-          [mainDimensionField]: key,
-        };
-      }
-      const month = row['detalle_factura.fecha_year_month'];
-      groupedData[key][month] = Number(row[metricField]) || 0;
-    });
-
-    // Convertir a array para la grid
-    const finalRowData = Object.values(groupedData);
-
-    // Crear definición de columnas
-    const cols = [
-      {
-        headerName: currentLevelDef.columnDefs[0].headerName,
-        field: mainDimensionField,
-        valueGetter: params => params.data ? params.data[mainDimensionField] : '',
-        pinned: 'left',
-        minWidth: 270,
-        sortable: true,
-        filter: 'agSetColumnFilter',
-      },
-    ];
-
-    // Agregar una columna para cada mes
-    const metricFormatter = currentLevelDef.columnDefs.find(
-      col => col.field === metricField
-    )?.valueFormatter;
-
-    selectedMonths.forEach(month => {
-      cols.push({
-        headerName: month,
-        field: month,
-        valueGetter: params => params.data ? params.data[month] || 0 : 0,
-        valueFormatter: metricFormatter || (p => p.value),
-        sortable: true,
-        filter: 'agNumberColumnFilter',
-        type: 'numericColumn',
-        aggFunc: 'sum',
-      });
-    });
-
-    return { rowData: finalRowData, columnDefs: cols };
-  }, [rawData, currentLevelDef, selectedMetric, selectedMonths]);
-
-  const defaultColDef = useMemo(
-    () => ({
-      flex: 1,
-      minWidth: 150,
-      resizable: true,
-    }),
-    []
-  );
-
-  const loadingOverlayComponentParams = useMemo(() => {
-    return { loadingMessage: "Un momento por favor..." };
-  }, []);
-
-  const statusBar = useMemo(() => {
-    return {
-      statusPanels: [
-        { statusPanel: 'agTotalRowCountComponent' },
-      ]
-    };
-  }, []);
+  const gridRef = useRef();
+  const {
+    selectedView,
+    selectedMetric,
+    numMonths,
+    months,
+    currentLevelDef,
+    rowData,
+    columnDefs,
+    pinnedBottomRowData,
+    loading,
+    defaultColDef,
+    loadingOverlayComponentParams,
+    statusBar,
+    handleViewChange,
+    setSelectedMetric,
+    setNumMonths,
+  } = useEvolucion();
 
   return (
     <>
@@ -151,7 +50,7 @@ const EvolucionView = () => {
               <ViewSelector
                 views={views}
                 selectedView={selectedView}
-                setSelectedView={setSelectedView}
+                setSelectedView={handleViewChange}
               />
             </div>
             <div className="control-group">
@@ -182,19 +81,13 @@ const EvolucionView = () => {
             ref={gridRef}
             theme={themeCostum}
             rowData={rowData}
-            loading={loading || monthsLoading}
+            loading={loading}
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             statusBar={statusBar}
-            pinnedBottomRowData={rowData.length > 0 ? [
-              selectedMonths.reduce((total, month) => {
-                total[currentLevelDef.dimensions[0]] = 'Total';
-                total[month] = rowData.reduce((sum, row) => sum + (row[month] || 0), 0);
-                return total;
-              }, {})
-            ] : []}
+            pinnedBottomRowData={pinnedBottomRowData}
           />
         </div>
       </div>
