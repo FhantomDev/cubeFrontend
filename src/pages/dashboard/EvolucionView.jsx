@@ -8,6 +8,7 @@ import Breadcrumb from "../../components/common/Breadcrumb";
 import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector/ViewSelector";
 import MetricSelector from "../../components/ui/MetricSelector/MetricSelector";
+import RappelToggle from "../../components/ui/RappelToggle/RappelToggle";
 import { useEvolucion } from "../../hooks/useEvolucion";
 import { views } from "./dashboardConstants";
 import "../../styles/Dashboard.css";
@@ -29,6 +30,8 @@ const EvolucionView = () => {
     defaultColDef,
     loadingOverlayComponentParams,
     statusBar,
+    isRappelActive,
+    setIsRappelActive,
     handleViewChange,
     setSelectedMetric,
     setNumMonths,
@@ -45,14 +48,6 @@ const EvolucionView = () => {
             <span>Evolución</span>
           </h1>
           <div className="dashboard-controls">
-            <div className="control-group">
-              <label>Vista:</label>
-              <ViewSelector
-                views={views}
-                selectedView={selectedView}
-                setSelectedView={handleViewChange}
-              />
-            </div>
             <div className="control-group">
               <label>Métrica:</label>
               <MetricSelector
@@ -71,6 +66,15 @@ const EvolucionView = () => {
                 style={{ width: '60px', padding: '5px' }}
               />
             </div>
+            <div className="control-group">
+              <label>Vista:</label>
+              <ViewSelector
+                views={views}
+                selectedView={selectedView}
+                setSelectedView={handleViewChange}
+              />
+            </div>
+            <RappelToggle onToggle={setIsRappelActive} />
           </div>
         </div>
       </div>

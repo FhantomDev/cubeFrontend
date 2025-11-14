@@ -6,11 +6,12 @@ export const useEvolucion = () => {
   const [selectedView, setSelectedView] = useState('categoria');
   const [selectedMetric, setSelectedMetric] = useState('detalle_factura.valor_neto_sum');
   const [numMonths, setNumMonths] = useState(6);
+  const [isRappelActive, setIsRappelActive] = useState(false);
   const { months, loading: monthsLoading } = useCubeMonths();
 
   // Obtener los últimos N meses
   const selectedMonths = useMemo(() => {
-    return months.slice(0, numMonths);
+    return months.slice(0, numMonths).reverse();
   }, [months, numMonths]);
 
   // Configuración de la vista actual
@@ -26,15 +27,19 @@ export const useEvolucion = () => {
       values: selectedMonths
     }] : [];
 
+    const metricToUse = isRappelActive && selectedMetric === 'detalle_factura.valor_neto_sum'
+      ? 'detalle_factura.resta_rappel'
+      : selectedMetric;
+
     return {
       dimensions: [currentLevelDef.dimensions[0], "detalle_factura.fecha_year_month"],
-      measures: [selectedMetric],
+      measures: [metricToUse],
       filters: monthFilter,
       order: {
         [currentLevelDef.dimensions[0]]: 'asc',
       }
     };
-  }, [currentLevelDef, selectedMetric, selectedMonths]);
+  }, [currentLevelDef, selectedMetric, selectedMonths, isRappelActive]);
 
   const { data: rawData, loading } = useCubeData(query, selectedMonths.length > 0);
 
@@ -46,7 +51,11 @@ export const useEvolucion = () => {
 
     // Obtener el nombre del campo principal (categoría, cliente, etc.)
     const mainDimensionField = currentLevelDef.dimensions[0];
-    const metricField = selectedMetric;
+
+    // Determinar qué métrica usar
+    const metricToUse = isRappelActive && selectedMetric === 'detalle_factura.valor_neto_sum'
+      ? 'detalle_factura.resta_rappel'
+      : selectedMetric;
 
     // Agrupar datos por dimensión principal
     const groupedData = {};
@@ -58,7 +67,7 @@ export const useEvolucion = () => {
         };
       }
       const month = row['detalle_factura.fecha_year_month'];
-      groupedData[key][month] = Number(row[metricField]) || 0;
+      groupedData[key][month] = Number(row[metricToUse]) || 0;
     });
 
     // Convertir a array para la grid
@@ -70,7 +79,6 @@ export const useEvolucion = () => {
         headerName: currentLevelDef.columnDefs[0].headerName,
         field: mainDimensionField,
         valueGetter: params => params.data ? params.data[mainDimensionField] : '',
-        pinned: 'left',
         minWidth: 270,
         sortable: true,
         filter: 'agSetColumnFilter',
@@ -79,7 +87,7 @@ export const useEvolucion = () => {
 
     // Agregar una columna para cada mes
     const metricFormatter = currentLevelDef.columnDefs.find(
-      col => col.field === metricField
+      col => col.field === selectedMetric
     )?.valueFormatter;
 
     selectedMonths.forEach(month => {
@@ -96,7 +104,7 @@ export const useEvolucion = () => {
     });
 
     return { rowData: finalRowData, columnDefs: cols };
-  }, [rawData, currentLevelDef, selectedMetric, selectedMonths]);
+  }, [rawData, currentLevelDef, selectedMetric, selectedMonths, isRappelActive]);
 
   // Generar fila de totales
   const pinnedBottomRowData = useMemo(() => {
@@ -150,6 +158,8 @@ export const useEvolucion = () => {
     defaultColDef,
     loadingOverlayComponentParams,
     statusBar,
+    isRappelActive,
+    setIsRappelActive,
     handleViewChange,
     setSelectedMetric,
     setNumMonths,
