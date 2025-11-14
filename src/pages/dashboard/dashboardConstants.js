@@ -1,5 +1,5 @@
 export const breadcrumbNameMap = {
-  '/dashboard': 'Dashboard',
+  '/dashboard': 'Proyección',
 };
 
 export const views = [
