@@ -53,17 +53,6 @@ const ProyeccionView = () => {
       <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
 
       <div className="dashboard-header">
-        {drilldownLevel > 0 && (
-          <div className="back-button-container">
-            <button
-              onClick={() => handleBreadcrumbClick(drilldownLevel - 1)}
-              className="back-button"
-            >
-              <span>←</span>
-              <span>Volver de: <strong>{filters[filters.length - 1]?.values[0]}</strong></span>
-            </button>
-          </div>
-        )}
         <div className="dashboard-header-content">
           <h1 className="dashboard-title">
             <img src="/logo-icbfs.png" alt="ICB Food Services" className="dashboard-logo" />

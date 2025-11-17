@@ -31,7 +31,7 @@ export const useDashboard = () => {
     }] : [];
 
     const measures = isRappelActive
-      ? currentLevelDef.measures.map(m => m === "detalle_factura.valor_neto_sum" ? "detalle_factura.resta_rappel" : m)
+      ? currentLevelDef.measures.map(m => m === "detalle_factura.valor_neto_sum" ? "detalle_factura.valor_resta_rappel" : m)
       : currentLevelDef.measures;
 
     return {
@@ -49,8 +49,8 @@ export const useDashboard = () => {
           return {
             ...colDef,
             headerName: "Venta (Rappel)",
-            field: "detalle_factura.resta_rappel",
-            valueGetter: p => p.data ? Number(p.data["detalle_factura.resta_rappel"]) : 0,
+            field: "detalle_factura.valor_resta_rappel",
+            valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_resta_rappel"]) : 0,
           };
         }
         return {

@@ -28,7 +28,7 @@ export const useEvolucion = () => {
     }] : [];
 
     const metricToUse = isRappelActive && selectedMetric === 'detalle_factura.valor_neto_sum'
-      ? 'detalle_factura.resta_rappel'
+      ? 'detalle_factura.valor_resta_rappel'
       : selectedMetric;
 
     return {
@@ -54,7 +54,7 @@ export const useEvolucion = () => {
 
     // Determinar qué métrica usar
     const metricToUse = isRappelActive && selectedMetric === 'detalle_factura.valor_neto_sum'
-      ? 'detalle_factura.resta_rappel'
+      ? 'detalle_factura.valor_resta_rappel'
       : selectedMetric;
 
     // Agrupar datos por dimensión principal
