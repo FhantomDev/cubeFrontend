@@ -4,7 +4,7 @@ import { levelDefs } from '../pages/dashboard/levelDefs';
 import { useCubeData } from './useCubeData';
 import { breadcrumbNameMap } from '../pages/dashboard/dashboardConstants';
 
-export const useProyeccion = () => {
+export const useProyeccion = (selectedSociety) => {
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [filters, setFilters] = useState([]);
   const [selectedView, setSelectedView] = useState('categoria');
@@ -14,7 +14,7 @@ export const useProyeccion = () => {
 
   const location = useLocation();
 
-  const currentLevelDef = levelDefs[selectedView][drilldownLevel];
+  const currentLevelDef = useMemo(() => levelDefs[selectedView][drilldownLevel], [selectedView, drilldownLevel]);
 
   const handleViewChange = (viewId) => {
     setSelectedView(viewId);
@@ -30,6 +30,12 @@ export const useProyeccion = () => {
       values: selectedMonth
     }] : [];
 
+    const societyFilter = selectedSociety && selectedSociety !== 'all' ? [{
+      member: "detalle_factura.sociedad",
+      operator: "equals",
+      values: [selectedSociety]
+    }] : [];
+
     const measures = isRappelActive
       ? currentLevelDef.measures.map(m => m === "detalle_factura.valor_neto_sum" ? "detalle_factura.valor_resta_rappel" : m)
       : currentLevelDef.measures;
@@ -37,9 +43,9 @@ export const useProyeccion = () => {
     return {
       dimensions: [...currentLevelDef.dimensions, ...dynamicDimensions],
       measures: measures,
-      filters: [...filters, ...monthFilter],
+      filters: [...filters, ...monthFilter, ...societyFilter], // Incluir societyFilter aquí
     };
-  }, [currentLevelDef, filters, dynamicDimensions, selectedMonth, isRappelActive]);
+  }, [currentLevelDef, filters, dynamicDimensions, selectedMonth, isRappelActive, selectedSociety]); // Añadir selectedSociety a las dependencias
 
   const dynamicColumnDefs = useMemo(() => {
     if (!currentLevelDef) return [];
