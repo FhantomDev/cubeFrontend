@@ -15,6 +15,7 @@ const numberFormatter = new Intl.NumberFormat('es-CL', {
 
 export const cliente = {
   0: {
+    dimensions: ["detalle_factura.nombre_cliente"],
     measures: ["detalle_factura.valor_neto_sum",
       "detalle_factura.peso_neto_sum",
       "detalle_factura.sku_count",
