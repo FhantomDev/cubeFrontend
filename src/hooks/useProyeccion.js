@@ -79,17 +79,21 @@ export const useProyeccion = () => {
       const isNumeric = colDef.filter === 'agNumberColumnFilter' || colDef.aggFunc;
 
       if (isNumeric && field) {
-        // Usar valueGetter si existe, sino acceso directo
-        const total = rowData.reduce((sum, row) => {
-          let value = 0;
+        const values = rowData.map(row => {
           if (colDef.valueGetter) {
-            value = colDef.valueGetter({ data: row });
+            return colDef.valueGetter({ data: row });
           } else {
-            value = row[field] ? Number(row[field]) : 0;
+            return row[field] ? Number(row[field]) : 0;
           }
-          return sum + (Number.isNaN(value) ? 0 : value);
-        }, 0);
-        totals[field] = total;
+        }).filter(v => !Number.isNaN(v));
+
+        // Aplicar el tipo de agregación correcto
+        if (colDef.aggFunc === 'avg') {
+          totals[field] = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+        } else {
+          // Por defecto suma (aggFunc: 'sum')
+          totals[field] = values.reduce((sum, val) => sum + val, 0);
+        }
       }
     });
 
