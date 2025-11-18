@@ -2,8 +2,8 @@
 
 .dashboard-container {
   padding: 0.5rem;
-  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
   min-height: 100vh;
+  background-color: #fca5a5;
 }
 
 .dashboard-header {
