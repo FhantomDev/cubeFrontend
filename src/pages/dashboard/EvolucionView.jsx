@@ -25,7 +25,7 @@ const EvolucionView = () => {
     currentLevelDef,
     rowData,
     columnDefs,
-    pinnedBottomRowData,
+    pinnedTopRowData,
     loading,
     defaultColDef,
     loadingOverlayComponentParams,
@@ -36,6 +36,12 @@ const EvolucionView = () => {
     setSelectedMetric,
     setNumMonths,
   } = useEvolucion();
+
+  const getRowStyle = params => {
+    if (params.node.isRowPinned()) {
+        return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
+    }
+  };
 
   return (
     <>
@@ -91,7 +97,8 @@ const EvolucionView = () => {
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             statusBar={statusBar}
-            pinnedBottomRowData={pinnedBottomRowData}
+            pinnedTopRowData={pinnedTopRowData}
+            getRowStyle={getRowStyle}
           />
         </div>
       </div>

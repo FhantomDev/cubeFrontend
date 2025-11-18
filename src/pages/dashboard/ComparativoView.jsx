@@ -27,7 +27,7 @@ const ComparativoView = () => {
     currentLevelDef,
     rowData,
     columnDefs,
-    pinnedBottomRowData,
+    pinnedTopRowData,
     loading,
     defaultColDef,
     loadingOverlayComponentParams,
@@ -42,6 +42,12 @@ const ComparativoView = () => {
   } = useComparativo();
 
   const periodOptions = ['Mes', 'Bimestre', 'Trimestre', 'Semestre'];
+
+  const getRowStyle = params => {
+    if (params.node.isRowPinned()) {
+        return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
+    }
+  };
 
   return (
     <>
@@ -124,7 +130,8 @@ const ComparativoView = () => {
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             statusBar={statusBar}
-            pinnedBottomRowData={pinnedBottomRowData}
+            pinnedTopRowData={pinnedTopRowData}
+            getRowStyle={getRowStyle}
           />
         </div>
       </div>

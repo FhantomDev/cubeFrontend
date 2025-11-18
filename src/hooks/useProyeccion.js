@@ -4,7 +4,7 @@ import { levelDefs } from '../pages/dashboard/levelDefs';
 import { useCubeData } from './useCubeData';
 import { breadcrumbNameMap } from '../pages/dashboard/dashboardConstants';
 
-export const useDashboard = () => {
+export const useProyeccion = () => {
   const [drilldownLevel, setDrilldownLevel] = useState(0);
   const [filters, setFilters] = useState([]);
   const [selectedView, setSelectedView] = useState('categoria');
@@ -65,6 +65,41 @@ export const useDashboard = () => {
   }, [currentLevelDef, isRappelActive]);
 
   const { data: rowData, loading } = useCubeData(query, selectedMonth.length > 0);
+
+  const pinnedTopRowData = useMemo(() => {
+    if (!rowData || rowData.length === 0) {
+      return [];
+    }
+
+    const totals = {};
+    dynamicColumnDefs.forEach(colDef => {
+      const field = colDef.field;
+
+      // Detectar si es columna numérica basándose en el filter
+      const isNumeric = colDef.filter === 'agNumberColumnFilter' || colDef.aggFunc;
+
+      if (isNumeric && field) {
+        // Usar valueGetter si existe, sino acceso directo
+        const total = rowData.reduce((sum, row) => {
+          let value = 0;
+          if (colDef.valueGetter) {
+            value = colDef.valueGetter({ data: row });
+          } else {
+            value = row[field] ? Number(row[field]) : 0;
+          }
+          return sum + (Number.isNaN(value) ? 0 : value);
+        }, 0);
+        totals[field] = total;
+      }
+    });
+
+    const firstColumnField = dynamicColumnDefs[0]?.field;
+    if (firstColumnField) {
+      totals[firstColumnField] = 'TOTAL';
+    }
+
+    return [totals];
+  }, [rowData, dynamicColumnDefs]);
 
   const crumbs = useMemo(() => {
     const pathnames = location.pathname.split('/').filter((x) => x);
@@ -170,5 +205,6 @@ export const useDashboard = () => {
     crumbs,
     handleBreadcrumbClick,
     currentLevelDef,
+    pinnedTopRowData,
   };
 };

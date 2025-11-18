@@ -12,7 +12,7 @@ const RappelToggle = ({ onToggle }) => {
 
   return (
     <div className="rappel-toggle-container" onClick={handleToggle}>
-      <span className="rappel-toggle-label">💰 Restar Rappel:</span>
+      <span className="rappel-toggle-label">Restar Rappel:</span>
       <div className="rappel-toggle-wrapper">
         <input
           type="checkbox"

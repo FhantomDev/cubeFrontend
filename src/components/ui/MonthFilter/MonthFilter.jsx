@@ -28,7 +28,7 @@ const MonthFilter = ({ selectedMonth, setSelectedMonth }) => {
 
   return (
     <div className="month-filter-container">
-      <label className="month-filter-label">📅 Mes:</label>
+      <label className="month-filter-label">Mes:</label>
       <MultiSelectMonthDropdown
         options={months}
         selectedValues={selectedMonth}

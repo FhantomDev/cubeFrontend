@@ -9,7 +9,7 @@ import customLoadingOverlay from "../../components/ui/customLoadingOverlay";
 import ViewSelector from "../../components/ui/ViewSelector/ViewSelector";
 import RappelToggle from "../../components/ui/RappelToggle/RappelToggle";
 import MonthFilter from "../../components/ui/MonthFilter/MonthFilter";
-import { useDashboard } from "../../hooks/useDashboard";
+import { useProyeccion } from "../../hooks/useProyeccion";
 import { views } from "./dashboardConstants";
 import "../../styles/Dashboard.css";
 
@@ -36,7 +36,8 @@ const ProyeccionView = () => {
     crumbs,
     handleBreadcrumbClick,
     currentLevelDef,
-  } = useDashboard();
+    pinnedTopRowData,
+  } = useProyeccion();
 
   const onColumnPivotModeChanged = useCallback(() => {
     if (gridRef.current && gridRef.current.api) {
@@ -47,6 +48,12 @@ const ProyeccionView = () => {
       }
     }
   }, [rowData, currentLevelDef]);
+
+  const getRowStyle = params => {
+    if (params.node.isRowPinned()) {
+        return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
+    }
+  };
 
   return (
     <>
@@ -86,7 +93,8 @@ const ProyeccionView = () => {
             onColumnPivotModeChanged={onColumnPivotModeChanged}
             onColumnVisible={handleColumnVisible}
             statusBar={statusBar}
-            grandTotalRow={"pinnedBottom"}
+            pinnedTopRowData={pinnedTopRowData}
+            getRowStyle={getRowStyle}
           />
         </div>
       </div>

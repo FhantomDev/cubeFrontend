@@ -181,7 +181,7 @@ export const useComparativo = () => {
   }, [actualData, compareData, currentLevelDef, selectedMetric, isRappelActive]);
 
   // Generar fila de totales
-  const pinnedBottomRowData = useMemo(() => {
+  const pinnedTopRowData = useMemo(() => {
     if (rowData.length === 0) return [];
 
     const totalActual = rowData.reduce((sum, row) => sum + (row.actual || 0), 0);
@@ -189,7 +189,7 @@ export const useComparativo = () => {
     const totalVariation = totalCompare !== 0 ? ((totalActual - totalCompare) / totalCompare) * 100 : 0;
 
     return [{
-      [currentLevelDef.dimensions[0]]: 'Total',
+      [currentLevelDef.dimensions[0]]: 'TOTAL',
       actual: totalActual,
       compare: totalCompare,
       variation: totalVariation,
@@ -231,7 +231,7 @@ export const useComparativo = () => {
     currentLevelDef,
     rowData,
     columnDefs,
-    pinnedBottomRowData,
+    pinnedTopRowData,
     loading: loadingActual || loadingCompare || monthsLoading,
     defaultColDef,
     loadingOverlayComponentParams,

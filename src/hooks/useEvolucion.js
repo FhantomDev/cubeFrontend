@@ -107,12 +107,12 @@ export const useEvolucion = () => {
   }, [rawData, currentLevelDef, selectedMetric, selectedMonths, isRappelActive]);
 
   // Generar fila de totales
-  const pinnedBottomRowData = useMemo(() => {
+  const pinnedTopRowData = useMemo(() => {
     if (rowData.length === 0) return [];
 
     return [
       selectedMonths.reduce((total, month) => {
-        total[currentLevelDef.dimensions[0]] = 'Total';
+        total[currentLevelDef.dimensions[0]] = 'TOTAL';
         total[month] = rowData.reduce((sum, row) => sum + (row[month] || 0), 0);
         return total;
       }, {})
@@ -153,7 +153,7 @@ export const useEvolucion = () => {
     currentLevelDef,
     rowData,
     columnDefs,
-    pinnedBottomRowData,
+    pinnedTopRowData,
     loading: loading || monthsLoading,
     defaultColDef,
     loadingOverlayComponentParams,

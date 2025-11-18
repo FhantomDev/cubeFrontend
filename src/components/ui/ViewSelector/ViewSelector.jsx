@@ -8,7 +8,7 @@ const ViewSelector = ({ views, selectedView, setSelectedView }) => {
 
   return (
     <div className="view-selector-container">
-      <label htmlFor="view-select" className="view-selector-label">👁️ Vista:</label>
+      <label htmlFor="view-select" className="view-selector-label">Vista:</label>
       <select
         id="view-select"
         value={selectedView}
