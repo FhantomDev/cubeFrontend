@@ -69,7 +69,6 @@ const ProyeccionView = () => {
 
   return (
     <>
-      <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
 
       <div className="dashboard-header">
         <div className="dashboard-header-content">
@@ -89,6 +88,8 @@ const ProyeccionView = () => {
           </div>
         </div>
       </div>
+
+      <Breadcrumb crumbs={crumbs} onDrilldownClick={handleBreadcrumbClick} />
 
       <div className="grid-container">
         <div className="grid-wrapper">
