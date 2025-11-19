@@ -1,7 +1,7 @@
 /* src/styles/Dashboard.css */
 
 .dashboard-container {
-  padding: 0.5rem;
+  padding: 0.1rem;
   min-height: 100vh;
   background-color: #fca5a5;
 }
@@ -88,7 +88,7 @@
 .grid-container {
   background: white;
   border-radius: 1rem;
-  padding: 0.8rem;
+  padding: 0.3rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   height: 100vh
 }
