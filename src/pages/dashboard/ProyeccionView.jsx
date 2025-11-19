@@ -101,10 +101,6 @@ const ProyeccionView = () => {
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClicked}
             pivotPanelShow="always"
-            sideBar={{
-              toolPanels: ["columns", "filters"],
-              closeToolPanel: false,
-            }}
             loadingOverlayComponent={customLoadingOverlay}
             loadingOverlayComponentParams={loadingOverlayComponentParams}
             onColumnPivotModeChanged={onColumnPivotModeChanged}

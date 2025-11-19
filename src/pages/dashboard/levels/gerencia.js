@@ -31,7 +31,7 @@ export const gerencia = {
       "detalle_factura.combinacion_sku_cliente"
     ],
     columnDefs: [
-      { headerName: "Gerencia", field: "detalle_factura.zona_ventas", valueGetter: p => p.data ? p.data["detalle_factura.zona_ventas"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', minWidth: 270 },
+      { headerName: "Gerencia", field: "detalle_factura.zona_ventas", valueGetter: p => p.data ? p.data["detalle_factura.zona_ventas"] : '', enableRowGroup: true, filter: 'agSetColumnFilter', minWidth: 260, pinned: 'left' },
       { headerName: "Venta", field: "detalle_factura.valor_neto_sum", valueGetter: p => p.data ? Number(p.data["detalle_factura.valor_neto_sum"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), sort: 'desc', filter: 'agNumberColumnFilter' },
       { headerName: "Ventas Proy.", field: "detalle_factura.ventas_proyeccion", valueGetter: p => p.data ? Number(p.data["detalle_factura.ventas_proyeccion"]) : 0, aggFunc: 'sum', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
       { headerName: "Precio Unit.", field: "detalle_factura.precio_unitario", valueGetter: p => p.data ? Number(p.data["detalle_factura.precio_unitario"]) : 0, aggFunc: 'avg', enableValue: true, valueFormatter: p => currencyFormatter.format(p.value), filter: 'agNumberColumnFilter' },
