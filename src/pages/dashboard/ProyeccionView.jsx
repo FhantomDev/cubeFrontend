@@ -72,9 +72,9 @@ const ProyeccionView = () => {
 
       <div className="dashboard-header">
         <div className="dashboard-header-content">
-          <h1 className="dashboard-title">
+          <div className="dashboard-logo">
             <img src="/logo-icbfs.png" alt="ICB Food Services" className="dashboard-logo" />
-          </h1>
+          </div>
           <div className="dashboard-controls">
             {/* SocietyFilter integrado aquí */}
             <ViewSelector views={views} selectedView={selectedView} setSelectedView={handleViewChange} />

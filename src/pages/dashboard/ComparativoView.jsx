@@ -45,7 +45,7 @@ const ComparativoView = () => {
 
   const getRowStyle = params => {
     if (params.node.isRowPinned()) {
-        return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
+      return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
     }
   };
 
@@ -55,10 +55,9 @@ const ComparativoView = () => {
 
       <div className="dashboard-header">
         <div className="dashboard-header-content">
-          <h1 className="dashboard-title">
+          <div className="dashboard-logo">
             <img src="/logo-icbfs.png" alt="ICB Food Services" className="dashboard-logo" />
-            <span>Comparativo</span>
-          </h1>
+          </div>
           <div className="dashboard-controls">
             <div className="control-group">
               <label>Actual:</label>
