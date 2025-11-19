@@ -174,8 +174,6 @@ export const useProyeccion = (selectedSociety) => {
 
   const defaultColDef = useMemo(
     () => ({
-      flex: 1,
-      minWidth: 150,
       sortable: true,
       resizable: true,
       enablePivot: true,
