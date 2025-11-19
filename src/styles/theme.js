@@ -27,7 +27,7 @@ export const themeCostum = themeAlpine.withParams({
 
   // Espaciado
   spacing: "0.5rem",
-  cellHorizontalPadding: "1rem",
+  cellHorizontalPadding: "0.2rem",
 
   // Fuentes
   fontSize: "0.925rem",

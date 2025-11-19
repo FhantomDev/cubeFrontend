@@ -29,7 +29,7 @@ const NavMenu = ({ activeTab, onTabClick }) => {
           </button>
         </div>
         <div className='date-update'>
-          Ultima actualización: {loading ? 'Cargando...' : error ? 'Error' : timestamp}
+          Última actualización: {loading ? 'Cargando...' : error ? 'Error' : timestamp}
         </div>
       </div>
     </>
