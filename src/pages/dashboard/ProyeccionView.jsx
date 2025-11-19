@@ -74,7 +74,6 @@ const ProyeccionView = () => {
         <div className="dashboard-header-content">
           <h1 className="dashboard-title">
             <img src="/logo-icbfs.png" alt="ICB Food Services" className="dashboard-logo" />
-            <span>Proyección</span>
           </h1>
           <div className="dashboard-controls">
             {/* SocietyFilter integrado aquí */}
