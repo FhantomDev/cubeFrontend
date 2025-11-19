@@ -47,7 +47,6 @@ const MultiSelectMonthDropdown = ({ options, selectedValues, onChange }) => {
     <div className="multi-select-month-dropdown-container" ref={dropdownRef}>
       <div className="multi-select-month-dropdown-header" onClick={handleHeaderClick}>
         <span>{displayValue}</span>
-        <span>{isOpen ? '▲' : '▼'}</span>
       </div>
 
       {isOpen && (
