@@ -42,12 +42,11 @@ const ProyeccionView = () => {
     handleBreadcrumbClick,
     currentLevelDef,
     pinnedTopRowData,
-  } = useProyeccion(selectedSociety); // Pasar selectedSociety al hook
+  } = useProyeccion(selectedSociety);
 
   const handleSocietyChange = (newSociety) => {
     setSelectedSociety(newSociety);
-    // Aquí puedes añadir la lógica para filtrar los datos de ProyeccionView
-    // o para pasar este valor a useProyeccion si maneja los filtros
+
     console.log('Sociedad seleccionada en ProyeccionView:', newSociety);
   };
 
