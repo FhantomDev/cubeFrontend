@@ -45,7 +45,7 @@ const ComparativoView = () => {
 
   const getRowStyle = params => {
     if (params.node.isRowPinned()) {
-      return { 'font-weight': 'bold', 'background-color': '#f0f0f0' };
+      return { 'font-weight': '650', 'background-color': '#ebebebff' };
     }
   };
 

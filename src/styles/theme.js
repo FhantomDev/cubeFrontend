@@ -13,7 +13,7 @@ export const themeCostum = themeAlpine.withParams({
   // Encabezados
   headerBackgroundColor: "#e5e7eb",
   headerTextColor: "#374151",
-  headerFontWeight: 600,
+  headerFontWeight: 700,
 
   // Filas
   rowHoverColor: "#e5e7eb",
@@ -23,7 +23,7 @@ export const themeCostum = themeAlpine.withParams({
   selectedRowBackgroundColor: "#fee2e2",
 
   // Filas fijadas (totales)
-  pinnedRowBackgroundColor: "#d1d5db",
+  pinnedRowBackgroundColor: "#173a71ff",
 
   // Espaciado
   spacing: "0.5rem",
