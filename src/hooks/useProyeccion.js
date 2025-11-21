@@ -177,6 +177,8 @@ export const useProyeccion = (selectedSociety) => {
       sortable: true,
       resizable: true,
       enablePivot: true,
+      flex: 1,
+      minWidth: 120,
     }),
     []
   );
