@@ -7,7 +7,7 @@ export const views = [
   { id: 'categoria', name: 'Categoría' },
   { id: 'centro', name: 'Centro Factura' },
   { id: 'cliente', name: 'Cliente' },
-  // dia
+  { id: 'dia', name: 'Día' },
   { id: 'direccion', name: 'Dirección' },
   { id: 'especialidad', name: 'Especialidad' },
   { id: 'numero_factura', name: 'Factura' },
