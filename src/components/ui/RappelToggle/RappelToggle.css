@@ -9,7 +9,7 @@
 
 .rappel-toggle-label {
   font-size: 0.925rem;
-  font-weight: 600;
+  font-weight: bold;
   color: #475569;
   user-select: none;
 }

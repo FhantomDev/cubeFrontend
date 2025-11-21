@@ -5,7 +5,7 @@ export const breadcrumbNameMap = {
 export const views = [
   { id: 'vendedor', name: 'Asesor' },
   { id: 'categoria', name: 'Categoría' },
-  { id: 'centro', name: 'Centro Suministrador' },
+  { id: 'centro', name: 'Centro Factura' },
   { id: 'cliente', name: 'Cliente' },
   // dia
   { id: 'direccion', name: 'Dirección' },
@@ -23,4 +23,6 @@ export const views = [
   { id: 'um_venta', name: 'Unidad Medida Venta' },
   { id: 'canal', name: 'Canal' },
   { id: 'zona', name: 'Zona' },
+  { id: 'jefe_venta', name: 'Jefatura Venta' },
+  { id: 'sku', name: 'SKU' },
 ];

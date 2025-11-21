@@ -17,6 +17,8 @@ import { especialidad } from './levels/especialidad';
 import { gerencia } from './levels/gerencia';
 import { sucursal } from './levels/sucursal';
 import { holding } from './levels/holding';
+import { jefe_venta } from './levels/jefe_venta';
+import { sku } from './levels/sku';
 
 export const levelDefs = {
   categoria,
@@ -38,4 +40,6 @@ export const levelDefs = {
   gerencia,
   sucursal,
   holding,
+  jefe_venta,
+  sku,
 };
